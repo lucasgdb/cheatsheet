@@ -16,8 +16,9 @@ export function Kbd({ className, isPrefix, ...props }: ComponentProps<'kbd'> & {
   );
 }
 
+/** Spaces around the word keep extracted text readable ("Ctrl+b then d"); flex layout hides them visually. */
 function Separator({ children }: { children: string }) {
-  return <span className="text-[11px] text-muted">{children}</span>;
+  return <span className="text-[11px] text-muted max-sm:text-xs">{` ${children} `}</span>;
 }
 
 /** Renders alternatives ("/") of key sequences ("then"). */
@@ -33,9 +34,10 @@ export function KeyCombo({ sequences, className }: { sequences: KeySequence[]; c
               {g > 0 && <Separator>then</Separator>}
               <span className="inline-flex items-center gap-[3px]">
                 {group.keys.map((key, k) => (
-                  <Kbd key={k} isPrefix={group.prefix}>
-                    {key}
-                  </Kbd>
+                  <Fragment key={k}>
+                    {k > 0 && <span className="sr-only">+</span>}
+                    <Kbd isPrefix={group.prefix}>{key}</Kbd>
+                  </Fragment>
                 ))}
               </span>
             </Fragment>

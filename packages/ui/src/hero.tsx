@@ -8,7 +8,7 @@ export function Hero({ className, ...props }: ComponentProps<'header'>) {
 /** Prompt line above the title: `~/cheatsheets (main) $ <command>`. */
 export function HeroPath({ command }: { command: string }) {
   return (
-    <p className="text-xs text-muted">
+    <p data-print-hide className="text-xs text-muted">
       ~/cheatsheets <span className="text-accent">(main)</span> $ {command}
     </p>
   );
@@ -18,12 +18,16 @@ export function HeroTitle({ name, className }: { name: string; className?: strin
   return (
     <h1
       className={cn(
-        'font-display text-[clamp(34px,6vw,60px)] leading-none font-[number:var(--sheet-display-weight)] tracking-[-0.03em] text-balance text-hi [overflow-wrap:anywhere]',
+        'font-display text-[clamp(30px,8vw,60px)] leading-none font-[number:var(--sheet-display-weight)] tracking-[-0.03em] text-hi',
         className,
       )}
     >
       {name}
-      <span className="text-accent">_</span>cheatsheet
+      {/* Drawn with CSS so the heading's text reads "tmux cheat sheet". */}
+      <span aria-hidden="true" className="text-accent after:content-['\_']" />
+      <wbr />
+      <span className="sr-only"> </span>
+      cheat<span className="sr-only"> </span>sheet
     </h1>
   );
 }

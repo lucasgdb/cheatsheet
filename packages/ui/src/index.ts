@@ -1,3 +1,4 @@
+export { BarButton } from './bar-button';
 export { cn } from './cn';
 export { Command, type CommandSyntax } from './command';
 export { CopyCommand } from './copy-command';
@@ -9,6 +10,8 @@ export { Nav, NavBrand, NavLink } from './nav';
 export { PageTransition } from './page-transition';
 export { Pane, PaneEmpty, PaneGrid } from './pane';
 export { SearchPrompt } from './search-prompt';
+export { SectionLinks, type SectionLink } from './section-links';
 export { Segmented, type SegmentedOption } from './segmented';
+export { SiteFooter } from './site-footer';
 export { StatusBar, type StatusWindow } from './status-bar';
 export { ToastProvider, useCopy } from './toast';

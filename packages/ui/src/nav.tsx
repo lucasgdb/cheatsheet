@@ -34,7 +34,7 @@ export function NavBrand({ render, className, ...props }: useRender.ComponentPro
     render,
     props: mergeProps<'a'>(
       {
-        className: cn('flex items-center gap-2 text-[13px] font-bold whitespace-nowrap text-hi', className),
+        className: cn('flex items-center gap-2 text-[13px] font-bold whitespace-nowrap text-hi pointer-coarse:py-3', className),
         children: (
           <>
             <span className="text-accent">&gt;_</span>cheatsheets
@@ -60,7 +60,7 @@ export function NavLink({
       {
         'aria-current': current ? 'page' : undefined,
         className: cn(
-          'rounded px-2.5 py-1.5 text-[13px] whitespace-nowrap text-muted-2 hover:text-hi aria-[current=page]:bg-ctl-on aria-[current=page]:text-accent',
+          'rounded px-2.5 py-1.5 transition-colors text-[13px] whitespace-nowrap pointer-coarse:py-3 text-muted-2 hover:text-hi aria-[current=page]:bg-ctl-on aria-[current=page]:text-accent',
           className,
         ),
       },

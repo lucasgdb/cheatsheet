@@ -15,7 +15,7 @@ export function SearchPrompt({ label, className, ...props }: ComponentProps<'inp
         type="search"
         autoComplete="off"
         spellCheck={false}
-        className="min-w-0 flex-1 bg-transparent text-sm text-prompt-fg outline-none placeholder:text-prompt-ph [&::-webkit-search-cancel-button]:hidden"
+        className="min-w-0 flex-1 self-stretch bg-transparent text-sm text-prompt-fg max-sm:text-base outline-none placeholder:text-prompt-ph [&::-webkit-search-cancel-button]:hidden"
         {...props}
       />
     </label>

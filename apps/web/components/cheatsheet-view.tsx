@@ -3,6 +3,7 @@
 import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import type { Cheatsheet, Entry } from '@cheatsheets/content';
 import {
+  BarButton,
   CopyCommand,
   EntryRow,
   Hero,
@@ -14,14 +15,17 @@ import {
   PaneEmpty,
   PaneGrid,
   SearchPrompt,
+  SectionLinks,
   Segmented,
+  SiteFooter,
   StatusBar,
   keysToText,
   parseKeys,
 } from '@cheatsheets/ui';
+import { formatDate } from '@/lib/site';
+import { sectionHeading } from '@/lib/sections';
+import { SiteCredit } from './site-credit';
 import { StatusClock } from './status-clock';
-
-const paneId = (categoryId: string) => `p-${categoryId}`;
 
 function readStored(key: string): string | null {
   try {
@@ -75,6 +79,7 @@ export function CheatsheetView({ sheet }: { sheet: Cheatsheet }) {
       const haystack = [
         entry.title,
         categoryId,
+        sheet.categories.find((category) => category.id === categoryId)?.title ?? '',
         ...(entry.commands ?? []),
         keysToText(parseKeys(entry.keys ?? [], prefix)),
       ]
@@ -87,14 +92,22 @@ export function CheatsheetView({ sheet }: { sheet: Cheatsheet }) {
       .filter((category) => category.entries.length > 0);
   }, [deferredQuery, sheet.categories, prefix]);
 
+  // Opening /tmux#panes marks that section as current (the browser already scrolled to it).
+  useEffect(() => {
+    const id = decodeURIComponent(window.location.hash.slice(1));
+    if (sheet.categories.some((category) => category.id === id)) setCurrent(id);
+  }, [sheet.categories]);
+
   const windowLabel = (categoryId: string) => {
     const index = sheet.categories.findIndex((category) => category.id === categoryId);
     return sheet.status.windowStyle === 'index' ? `${index}:${categoryId}` : `:${categoryId}`;
   };
 
   // Scroll the pane (title included) into view, then flash it once scrolling settles.
+  // The URL gets the section's fragment, so the position can be shared.
   const jump = (id: string) => {
     setCurrent(id);
+    window.history.replaceState(window.history.state, '', `#${id}`);
     const el = document.getElementById(id);
     if (!el) return;
     el.removeAttribute('data-flash');
@@ -129,7 +142,7 @@ export function CheatsheetView({ sheet }: { sheet: Cheatsheet }) {
         <HeroPath command={sheet.hero.command} />
         <HeroTitle name={sheet.name} />
         <HeroLede>{sheet.hero.lede}</HeroLede>
-        <div className="flex flex-wrap items-stretch gap-3">
+        <div data-print-hide className="flex flex-wrap items-stretch gap-3">
           <SearchPrompt
             ref={searchRef}
             id={`search-${sheet.slug}`}
@@ -143,7 +156,12 @@ export function CheatsheetView({ sheet }: { sheet: Cheatsheet }) {
             }}
           />
           <Segmented label={control.label} value={setting} options={control.options} onValueChange={changeSetting} />
+          <BarButton onClick={() => window.print()}>print</BarButton>
         </div>
+        <SectionLinks
+          items={sheet.categories.map((category) => ({ id: category.id, label: category.title.toLowerCase() }))}
+          onSelect={jump}
+        />
       </Hero>
 
       <div className="gutter mx-auto max-w-[1240px]">
@@ -154,8 +172,9 @@ export function CheatsheetView({ sheet }: { sheet: Cheatsheet }) {
             categories.map((category) => (
               <Pane
                 key={category.id}
-                id={paneId(category.id)}
+                id={category.id}
                 label={windowLabel(category.id)}
+                heading={sectionHeading(sheet, category)}
                 meta={`${category.entries.length} ${sheet.status.countNoun}`}
                 description={category.description}
               >
@@ -182,12 +201,26 @@ export function CheatsheetView({ sheet }: { sheet: Cheatsheet }) {
         </PaneGrid>
       </div>
 
+      <SiteFooter>
+        <p>
+          Updated <time dateTime={sheet.updatedAt}>{formatDate(sheet.updatedAt)}</time> · checked against{' '}
+          {sheet.testedWith} · sources:{' '}
+          {sheet.sources.map((source, index) => (
+            <span key={source.url}>
+              {index > 0 ? ', ' : ''}
+              <a href={source.url}>{source.label}</a>
+            </span>
+          ))}
+        </p>
+        <SiteCredit />
+      </SiteFooter>
+
       <StatusBar
         left={sheet.status.left}
         windows={sheet.categories.map((category) => ({
-          id: paneId(category.id),
+          id: category.id,
           label: windowLabel(category.id),
-          current: current === paneId(category.id),
+          current: current === category.id,
         }))}
         onSelect={jump}
         right={

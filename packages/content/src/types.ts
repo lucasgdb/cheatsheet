@@ -12,7 +12,10 @@ export type Entry = {
 };
 
 export type Category = {
+  /** URL fragment and status bar label (e.g. "copy-mode" → /tmux#copy-mode). */
   id: string;
+  /** Human heading, read together with the sheet name (e.g. "tmux" + "Copy mode"). */
+  title: string;
   description: string;
   entries: Entry[];
 };
@@ -45,10 +48,23 @@ export type Syntax = 'tmux' | 'shell';
 /** How category labels read in the status bar and pane headers. */
 export type WindowStyle = 'index' | 'colon';
 
+export type Source = { label: string; url: string };
+
 export type Cheatsheet = {
   slug: string;
   name: string;
   syntax: Syntax;
+  /** One line for cards and lists, without the tool name repeated as a label. */
+  summary: string;
+  /** ISO dates (YYYY-MM-DD) of first publication and of the last content review. */
+  publishedAt: string;
+  updatedAt: string;
+  /** Versions the entries were checked against, shown next to the update date. */
+  testedWith: string;
+  /** The tool itself, for structured data. */
+  tool: { url: string; operatingSystem: string };
+  /** Official references the entries were checked against. */
+  sources: Source[];
   seo: {
     title: string;
     description: string;

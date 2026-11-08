@@ -50,7 +50,7 @@ export function Command({
     <button
       type="button"
       className={cn(
-        'p-0 text-left text-xs text-cmd [overflow-wrap:anywhere]',
+        "relative p-0 text-left text-xs text-cmd [overflow-wrap:anywhere] max-sm:text-[13px] after:absolute after:-inset-x-1 after:-inset-y-2.5 after:content-[''] pointer-fine:after:hidden",
         syntax === 'tmux'
           ? 'hover:text-cmd-hover'
           : 'decoration-accent underline-offset-3 hover:text-cmd-hover hover:underline',
@@ -58,7 +58,7 @@ export function Command({
       )}
       {...props}
     >
-      {syntax === 'tmux' ? highlightTmux(text) : highlightShell(text)}
+      <code className="font-[inherit]">{syntax === 'tmux' ? highlightTmux(text) : highlightShell(text)}</code>
     </button>
   );
 }

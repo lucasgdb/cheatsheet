@@ -35,7 +35,7 @@ export function Segmented({
         <Toggle
           key={option.value}
           value={option.value}
-          className="min-h-[38px] border-l border-line px-3 text-muted-2 hover:text-hi data-pressed:bg-ctl-on data-pressed:text-accent"
+          className="min-h-[38px] transition-colors pointer-coarse:min-h-11 border-l border-line px-3 text-muted-2 hover:text-hi data-pressed:bg-ctl-on data-pressed:text-accent"
         >
           {option.label}
         </Toggle>

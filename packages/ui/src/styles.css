@@ -23,7 +23,7 @@
   --sheet-fg: #c6ccd6;
   --sheet-hi: #eef1f5;
   --sheet-text: #d5dae2;
-  --sheet-muted: #6e7787;
+  --sheet-muted: #7d8696;
   --sheet-muted-2: #8f98a8;
   --sheet-accent: #a8d38a;
   --sheet-ctl-on: #1b2230;
@@ -151,6 +151,12 @@
     font-family: var(--font-mono);
     font-size: 13px;
     -webkit-font-smoothing: antialiased;
+  }
+
+  @media (max-width: 639px) {
+    body {
+      font-size: 14px;
+    }
   }
 
   button:not(:disabled),
@@ -298,5 +304,66 @@
   from {
     opacity: 0;
     transform: translateX(-48px);
+  }
+}
+
+/*
+ * Print: a light, two-column reference with the reader's prefix/alias already applied.
+ * Navigation, search and the status bar are left out.
+ */
+@media print {
+  :root,
+  [data-sheet] {
+    color-scheme: light;
+    --sheet-bg: #ffffff;
+    --sheet-fg: #111111;
+    --sheet-hi: #000000;
+    --sheet-text: #111111;
+    --sheet-muted: #555555;
+    --sheet-muted-2: #444444;
+    --sheet-line: #bbbbbb;
+    --sheet-dash: #dddddd;
+    --sheet-accent: #000000;
+    --sheet-kbd: #ffffff;
+    --sheet-kbd-line: #999999;
+    --sheet-kbd-fg: #000000;
+    --sheet-pfx: #ffffff;
+    --sheet-pfx-line: #999999;
+    --sheet-cmd: #222222;
+    --sheet-dollar: #888888;
+    --sheet-verb: #000000;
+    --sheet-flag: #333333;
+  }
+
+  @page {
+    margin: 12mm;
+  }
+
+  body {
+    font-size: 10px;
+  }
+
+  .site-nav,
+  .status-bar,
+  [data-print-hide] {
+    display: none !important;
+  }
+
+  main {
+    padding-bottom: 0 !important;
+  }
+
+  [data-pane-grid] {
+    display: block;
+    columns: 2;
+    column-gap: 12px;
+    padding: 0;
+  }
+
+  [data-pane] {
+    break-inside: avoid;
+    margin-bottom: 12px;
+    box-shadow: none;
+    border: 1px solid var(--sheet-line);
   }
 }

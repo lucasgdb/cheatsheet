@@ -12,13 +12,14 @@ export type KeySequence = KeyGroup[];
  * - Each string is an alternative.
  * - Space-separated tokens are pressed in sequence.
  * - `P` is replaced by the prefix (e.g. "Ctrl+b") when one is given.
- * - `C-x` means Ctrl + x.
+ * - `C-x` means Ctrl + x, `M-x` means Alt + x.
  */
 export function parseKeys(alternatives: string[], prefix?: string): KeySequence[] {
   return alternatives.map((alternative) =>
     alternative.split(' ').map((token): KeyGroup => {
       if (prefix && token === 'P') return { prefix: true, keys: prefix.split('+') };
       if (token.startsWith('C-') && token.length > 2) return { prefix: false, keys: ['Ctrl', token.slice(2)] };
+      if (token.startsWith('M-') && token.length > 2) return { prefix: false, keys: ['Alt', token.slice(2)] };
       return { prefix: false, keys: [token] };
     }),
   );

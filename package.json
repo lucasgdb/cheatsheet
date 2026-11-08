@@ -9,6 +9,7 @@
     "dev": "pnpm --filter @cheatsheets/web dev",
     "build": "pnpm --filter @cheatsheets/web build",
     "start": "pnpm --filter @cheatsheets/web start",
-    "typecheck": "pnpm -r typecheck"
+    "typecheck": "pnpm -r typecheck",
+    "pdf": "pnpm --filter @cheatsheets/web pdf"
   }
 }

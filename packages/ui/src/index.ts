@@ -1,4 +1,4 @@
-export { BarButton } from './bar-button';
+export { BarButton, BarLink } from './bar-button';
 export { cn } from './cn';
 export { Command, type CommandSyntax } from './command';
 export { CopyCommand } from './copy-command';

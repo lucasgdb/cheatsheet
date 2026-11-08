@@ -386,12 +386,16 @@
 }
 
 /*
- * Print: a light, two-column reference with the reader's prefix/alias already applied.
- * Navigation, search and the status bar are left out.
+ * Print. Two looks:
+ * - Browser print (Ctrl+P): light, ink-friendly, two columns.
+ * - Ready-made PDFs (html[data-pdf], set by apps/web/scripts/generate-pdfs.ts): the sheet's
+ *   own dark design system, A4 portrait, two columns. The PDF's status bar is drawn by the
+ *   generator's page footer.
+ * Both apply the reader's prefix/alias and leave out navigation, search and the status bar.
  */
 @media print {
-  :root,
-  [data-sheet] {
+  html:not([data-pdf]),
+  html:not([data-pdf]) [data-sheet] {
     color-scheme: light;
     --sheet-bg: #ffffff;
     --sheet-fg: #111111;
@@ -413,9 +417,8 @@
     --sheet-flag: #333333;
   }
 
-  @page {
-    margin: 12mm;
-  }
+  /* No @page margins here: they would also override the PDF generator's margins
+     (browser print keeps its own defaults). */
 
   body {
     font-size: 10px;
@@ -443,5 +446,103 @@
     margin-bottom: 12px;
     box-shadow: none;
     border: 1px solid var(--sheet-line);
+  }
+
+  /* ---- Ready-made PDF ---- */
+  html[data-pdf] {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+    background: var(--sheet-bg);
+  }
+
+  html[data-pdf] * {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  html[data-pdf] body {
+    font-size: 9.5px;
+  }
+
+  html[data-pdf] [data-sheet] {
+    min-height: 0;
+  }
+
+  /* Side breathing room on the sheet's own ground (the generator's footer matches it). */
+  html[data-pdf] .gutter {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+
+  html[data-pdf] header:has(h1) {
+    padding-block: 6px 14px;
+    gap: 8px;
+  }
+
+  html[data-pdf] h1 {
+    font-size: 30px;
+  }
+
+  html[data-pdf] header:has(h1) > p:not([data-print-hide]) {
+    max-width: none;
+    font-size: 9.5px;
+    line-height: 1.5;
+  }
+
+  /* The padding repeats at the top of every page (clone), so a pane that starts a page
+     keeps its top border clear of the page's top band. */
+  html[data-pdf] [data-pane-grid] {
+    columns: 2;
+    column-gap: 10px;
+    padding-top: 8px;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  /* A pane is never split across columns or pages, so every block keeps its heading and
+     columns read top to bottom. Rows are tighter than on screen so more fits per column. */
+  html[data-pdf] [data-pane] {
+    break-inside: avoid;
+    margin-bottom: 10px;
+    padding: 10px 12px 8px;
+    border-color: var(--sheet-line);
+    background: var(--sheet-bg);
+  }
+
+  html[data-pdf] [data-pane] > div {
+    break-inside: avoid;
+    padding-block: 4px;
+    grid-template-rows: minmax(18px, auto);
+    row-gap: 3px;
+  }
+
+  html[data-pdf] [data-pane] > p {
+    margin-bottom: 6px;
+  }
+
+  html[data-pdf] [data-pane] > header,
+  html[data-pdf] [data-pane] > p {
+    break-after: avoid;
+    break-inside: avoid;
+  }
+
+  html[data-pdf] [data-pane] h2,
+  html[data-pdf] [data-pane] header {
+    font-size: 10px;
+  }
+
+  html[data-pdf] [data-pane] kbd {
+    font-size: 9.5px;
+    line-height: 14px;
+    padding: 0 4px;
+  }
+
+  html[data-pdf] [data-pane] code {
+    font-size: 9.5px;
+  }
+
+  html[data-pdf] main > footer {
+    margin-top: 6px;
+    break-inside: avoid;
   }
 }

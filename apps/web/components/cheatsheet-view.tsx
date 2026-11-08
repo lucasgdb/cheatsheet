@@ -1,9 +1,9 @@
 'use client';
 
 import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
-import type { Cheatsheet, Entry } from '@cheatsheets/content';
+import { pdfFileName, type Cheatsheet, type Entry } from '@cheatsheets/content';
 import {
-  BarButton,
+  BarLink,
   CopyCommand,
   EntryRow,
   Hero,
@@ -64,6 +64,7 @@ export function CheatsheetView({ sheet }: { sheet: Cheatsheet }) {
   };
 
   const prefix = control.kind === 'prefix' ? setting : undefined;
+  const currentLabel = control.options.find((option) => option.value === setting)?.label ?? setting;
   const applyAlias = useCallback(
     (command: string) =>
       control.kind === 'alias' && setting !== control.binary
@@ -156,7 +157,14 @@ export function CheatsheetView({ sheet }: { sheet: Cheatsheet }) {
             }}
           />
           <Segmented label={control.label} value={setting} options={control.options} onValueChange={changeSetting} />
-          <BarButton onClick={() => window.print()}>print</BarButton>
+          <BarLink
+            href={`/pdf/${pdfFileName(sheet, setting)}`}
+            target="_blank"
+            rel="noopener"
+            aria-label={`Open a printable PDF of the ${sheet.name} cheat sheet (${control.label} ${currentLabel})`}
+          >
+            print
+          </BarLink>
         </div>
         <SectionLinks
           items={sheet.categories.map((category) => ({ id: category.id, label: category.title.toLowerCase() }))}
@@ -233,7 +241,7 @@ export function CheatsheetView({ sheet }: { sheet: Cheatsheet }) {
             {control.kind === 'prefix' ? (
               <span>prefix {setting.replace('Ctrl+', 'C-')}</span>
             ) : (
-              <span>{control.options.find((option) => option.value === setting)?.label ?? setting}</span>
+              <span>{currentLabel}</span>
             )}
             {sheet.status.clock ? <StatusClock className="max-sm:hidden" /> : null}
           </>

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { JetBrains_Mono, Martian_Mono, Red_Hat_Display, Red_Hat_Mono } from 'next/font/google';
 import { ToastProvider } from '@cheatsheets/ui';
+import { SiteNav } from '@/components/site-nav';
 import { siteDescription, siteName, siteUrl } from '@/lib/site';
 import './globals.css';
 
@@ -30,7 +31,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={fonts}>
       <body>
-        <ToastProvider>{children}</ToastProvider>
+        <ToastProvider>
+          <SiteNav />
+          {children}
+        </ToastProvider>
       </body>
     </html>
   );

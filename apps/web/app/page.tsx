@@ -1,14 +1,13 @@
 import { cheatsheets, countEntries } from '@cheatsheets/content';
 import { CopyCommand, EntryRow, Hero, HeroLede, HeroPath, PageTransition, Pane, PaneGrid } from '@cheatsheets/ui';
 import { JsonLd } from '@/components/json-ld';
-import { SiteNav } from '@/components/site-nav';
 import { TransitionLink } from '@/components/view-transitions';
 import { siteDescription, siteName, siteUrl } from '@/lib/site';
 
 export default function HomePage() {
   return (
     <PageTransition>
-    <div className="min-h-dvh bg-bg font-mono text-fg">
+    <div className="min-h-[calc(100dvh-var(--spacing-nav))] bg-bg font-mono text-fg">
       <JsonLd
         data={{
           '@context': 'https://schema.org',
@@ -26,7 +25,6 @@ export default function HomePage() {
           ],
         }}
       />
-      <SiteNav />
       <main className="pb-16">
         <Hero className="gutter mx-auto max-w-[1240px]">
           <HeroPath command="ls" />

@@ -182,12 +182,40 @@
 }
 
 /*
- * Cheat sheet changes: React <ViewTransition> (PageTransition) with the link's
- * transition type. The header stays put and switches theme at once; the status
- * bar cross-fades; the page slides a little and fades, mirrored going back.
+ * Page changes (React <ViewTransition> via PageTransition + the link's transition type).
+ * - Header: persists and never animates; only the selected tab's colour changes.
+ * - Status bar: swaps with the header; fades in from / out to the home page.
+ * - Page content: slides left or right, following the nav order.
  */
+.site-nav {
+  view-transition-name: site-nav;
+}
+
+.status-bar {
+  view-transition-name: status-bar;
+}
+
+/* Backdrop blur is not captured in view-transition snapshots, so the header is drawn
+   solid (same resting tone) while a transition runs, instead of turning see-through. */
+:root:active-view-transition .site-nav {
+  background-color: color-mix(in oklab, var(--sheet-nav) 70%, var(--sheet-bg));
+  backdrop-filter: none;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
+/* Layer order follows capture order, so a page that enters later would cover the
+   header and status bar (which existed before). Keep both above the content. */
 ::view-transition-group(site-nav),
 ::view-transition-group(status-bar) {
+  z-index: 2;
+}
+
+::view-transition-group(site-nav),
+::view-transition-new(site-nav) {
   animation: none;
 }
 
@@ -195,55 +223,78 @@
   display: none;
 }
 
-::view-transition-new(site-nav) {
+/* Status bar: between cheat sheets it swaps at once, like the header (no overlapping
+   text or colours). It only fades when it has no counterpart: in from home, out to home. */
+::view-transition-group(status-bar),
+::view-transition-new(status-bar) {
   animation: none;
 }
 
-::view-transition-old(status-bar),
-::view-transition-new(status-bar) {
-  animation-duration: 220ms;
+::view-transition-old(status-bar) {
+  display: none;
+}
+
+::view-transition-old(status-bar):only-child {
+  display: block;
+  animation: 220ms ease both status-fade-out;
+}
+
+::view-transition-new(status-bar):only-child {
+  animation: 220ms ease both status-fade-in;
+}
+
+@keyframes status-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes status-fade-in {
+  from {
+    opacity: 0;
+  }
 }
 
 ::view-transition-old(.sheet-forward) {
-  animation: 160ms cubic-bezier(0.4, 0, 1, 1) both sheet-out;
+  animation: 200ms cubic-bezier(0.4, 0, 1, 1) both slide-out-left;
 }
 
 ::view-transition-new(.sheet-forward) {
-  animation: 300ms cubic-bezier(0.2, 0.8, 0.2, 1) 100ms both sheet-in;
+  animation: 320ms cubic-bezier(0.2, 0.8, 0.2, 1) 80ms both slide-in-right;
 }
 
 ::view-transition-old(.sheet-back) {
-  animation: 160ms cubic-bezier(0.4, 0, 1, 1) both sheet-out-back;
+  animation: 200ms cubic-bezier(0.4, 0, 1, 1) both slide-out-right;
 }
 
 ::view-transition-new(.sheet-back) {
-  animation: 300ms cubic-bezier(0.2, 0.8, 0.2, 1) 100ms both sheet-in-back;
+  animation: 320ms cubic-bezier(0.2, 0.8, 0.2, 1) 80ms both slide-in-left;
 }
 
-@keyframes sheet-out {
+@keyframes slide-out-left {
   to {
     opacity: 0;
-    transform: translateX(-24px);
+    transform: translateX(-48px);
   }
 }
 
-@keyframes sheet-in {
+@keyframes slide-in-right {
   from {
     opacity: 0;
-    transform: translateX(32px);
+    transform: translateX(48px);
   }
 }
 
-@keyframes sheet-out-back {
+@keyframes slide-out-right {
   to {
     opacity: 0;
-    transform: translateX(24px);
+    transform: translateX(48px);
   }
 }
 
-@keyframes sheet-in-back {
+@keyframes slide-in-left {
   from {
     opacity: 0;
-    transform: translateX(-32px);
+    transform: translateX(-48px);
   }
 }

@@ -4,7 +4,6 @@ import { cheatsheets, countEntries, getCheatsheet } from '@cheatsheets/content';
 import { PageTransition } from '@cheatsheets/ui';
 import { CheatsheetView } from '@/components/cheatsheet-view';
 import { JsonLd } from '@/components/json-ld';
-import { SiteNav } from '@/components/site-nav';
 import { siteName, siteUrl } from '@/lib/site';
 
 type Props = { params: Promise<{ slug: string }> };
@@ -36,7 +35,7 @@ export default async function CheatsheetPage({ params }: Props) {
 
   return (
     <PageTransition>
-    <div data-sheet={sheet.slug} className="min-h-dvh bg-bg font-mono text-fg">
+    <div data-sheet={sheet.slug} className="min-h-[calc(100dvh-var(--spacing-nav))] bg-bg font-mono text-fg">
       <JsonLd
         data={{
           '@context': 'https://schema.org',
@@ -64,7 +63,6 @@ export default async function CheatsheetPage({ params }: Props) {
           ],
         }}
       />
-      <SiteNav current={sheet.slug} />
       <CheatsheetView sheet={sheet} />
     </div>
     </PageTransition>

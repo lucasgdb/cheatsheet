@@ -124,7 +124,7 @@ export function CheatsheetView({ sheet }: { sheet: Cheatsheet }) {
   }, []);
 
   return (
-    <main className="min-h-[calc(100dvh-var(--spacing-nav))] pb-[calc(64px+env(safe-area-inset-bottom,0px))]">
+    <main className="pb-[calc(64px+env(safe-area-inset-bottom,0px))]">
       <Hero className="gutter mx-auto max-w-[1240px]">
         <HeroPath command={sheet.hero.command} />
         <HeroTitle name={sheet.name} />

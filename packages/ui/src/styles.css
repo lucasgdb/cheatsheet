@@ -139,7 +139,9 @@
 }
 
 @layer base {
+  /* Always show the scrollbar so the layout doesn't shift between pages of different heights. */
   html {
+    overflow-y: scroll;
     scroll-padding-top: calc(var(--spacing-nav) + env(safe-area-inset-top, 0px) + 16px);
   }
 

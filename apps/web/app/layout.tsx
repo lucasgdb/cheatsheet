@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { JetBrains_Mono, Martian_Mono, Red_Hat_Display, Red_Hat_Mono } from 'next/font/google';
 import { ToastProvider } from '@cheatsheets/ui';
 import { siteDescription, siteName, siteUrl } from '@/lib/site';
+import { ViewTransitions } from '@/components/view-transitions';
 import './globals.css';
 
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-jetbrains-mono-src', display: 'swap' });
@@ -30,7 +31,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={fonts}>
       <body>
-        <ToastProvider>{children}</ToastProvider>
+        <ViewTransitions>
+          <ToastProvider>{children}</ToastProvider>
+        </ViewTransitions>
       </body>
     </html>
   );

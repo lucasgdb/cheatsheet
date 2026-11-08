@@ -180,3 +180,70 @@
 @utility text-trim {
   text-box: trim-both cap alphabetic;
 }
+
+/*
+ * Cheat sheet changes (View Transitions, started from the app's TransitionLink).
+ * The header stays put and switches theme at once; the status bar cross-fades;
+ * the page slides a little and fades, mirrored when going back in the nav order.
+ */
+::view-transition-group(site-nav),
+::view-transition-group(status-bar) {
+  animation: none;
+}
+
+::view-transition-old(site-nav) {
+  display: none;
+}
+
+::view-transition-new(site-nav) {
+  animation: none;
+}
+
+::view-transition-old(status-bar),
+::view-transition-new(status-bar) {
+  animation-duration: 220ms;
+}
+
+::view-transition-old(root) {
+  animation: 160ms cubic-bezier(0.4, 0, 1, 1) both sheet-out;
+}
+
+::view-transition-new(root) {
+  animation: 300ms cubic-bezier(0.2, 0.8, 0.2, 1) 100ms both sheet-in;
+}
+
+:root[data-direction='back']::view-transition-old(root) {
+  animation-name: sheet-out-back;
+}
+
+:root[data-direction='back']::view-transition-new(root) {
+  animation-name: sheet-in-back;
+}
+
+@keyframes sheet-out {
+  to {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+}
+
+@keyframes sheet-in {
+  from {
+    opacity: 0;
+    transform: translateX(32px);
+  }
+}
+
+@keyframes sheet-out-back {
+  to {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+}
+
+@keyframes sheet-in-back {
+  from {
+    opacity: 0;
+    transform: translateX(-32px);
+  }
+}

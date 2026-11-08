@@ -8,7 +8,7 @@ import { cn } from './cn';
 /** Sticky, blurred site header. */
 export function Nav({ brand, children }: { brand: ReactNode; children?: ReactNode }) {
   return (
-    <header className="sticky top-[env(safe-area-inset-top,0px)] z-50 border-b border-line/80 bg-nav/70 backdrop-blur-md backdrop-saturate-150">
+    <header className="sticky [view-transition-name:site-nav] top-[env(safe-area-inset-top,0px)] z-50 border-b border-line/80 bg-nav/70 backdrop-blur-md backdrop-saturate-150">
       <div className="gutter mx-auto flex h-nav max-w-[1240px] items-center gap-5">
         {brand}
         <nav aria-label="Cheatsheets" className="flex min-w-0 gap-0.5 overflow-x-auto [scrollbar-width:none]">

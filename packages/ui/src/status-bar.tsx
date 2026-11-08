@@ -15,7 +15,7 @@ export function StatusBar({
   right?: ReactNode;
 }) {
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 bg-bar pb-[env(safe-area-inset-bottom,0px)] text-[12.5px] text-bar-fg">
+    <div className="fixed [view-transition-name:status-bar] inset-x-0 bottom-0 z-40 bg-bar pb-[env(safe-area-inset-bottom,0px)] text-[12.5px] text-bar-fg">
       <nav aria-label="Sections" className="gutter flex h-[26px] items-center gap-3 whitespace-nowrap">
         <span>{left}</span>
         <div className="flex min-w-0 flex-1 gap-0.5 overflow-x-auto [scrollbar-width:none]">

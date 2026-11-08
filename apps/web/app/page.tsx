@@ -1,8 +1,8 @@
-import Link from 'next/link';
 import { cheatsheets, countEntries } from '@cheatsheets/content';
 import { Command, EntryRow, Hero, HeroLede, HeroPath, Pane, PaneGrid } from '@cheatsheets/ui';
 import { JsonLd } from '@/components/json-ld';
 import { SiteNav } from '@/components/site-nav';
+import { TransitionLink } from '@/components/view-transitions';
 import { siteDescription, siteName, siteUrl } from '@/lib/site';
 
 export default function HomePage() {
@@ -41,9 +41,9 @@ export default function HomePage() {
                 key={sheet.slug}
                 data-sheet={sheet.slug}
                 label={
-                  <Link href={`/${sheet.slug}`} className="hover:underline">
+                  <TransitionLink href={`/${sheet.slug}`} className="hover:underline">
                     {sheet.name}
-                  </Link>
+                  </TransitionLink>
                 }
                 meta={`${countEntries(sheet)} entries`}
                 description={sheet.seo.description}
@@ -58,12 +58,12 @@ export default function HomePage() {
                     />
                   );
                 })}
-                <Link
+                <TransitionLink
                   href={`/${sheet.slug}`}
                   className="mt-3 inline-block border border-line px-3 py-1.5 text-xs text-accent hover:border-accent"
                 >
                   Open the {sheet.name} cheat sheet →
-                </Link>
+                </TransitionLink>
               </Pane>
             ))}
           </PaneGrid>

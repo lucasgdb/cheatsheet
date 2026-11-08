@@ -12,7 +12,6 @@ Next.js 16 (App Router, static generation) · React 19 · TypeScript 7 · Tailwi
 apps/web            Next.js site (routes, SEO, page composition)
 packages/ui         Design system: components, Tailwind theme, per-sheet tokens (all CSS lives here)
 packages/content    Typed cheat sheet data (tmux, kubectl)
-design/             HTML mockup used to validate the visuals
 ```
 
 ## Run

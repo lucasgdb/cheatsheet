@@ -17,11 +17,12 @@ import { TransitionLink } from '@/components/view-transitions';
 import { authorName, authorUrl, siteDescription } from '@/lib/site';
 import { homeGraph } from '@/lib/structured-data';
 
-const toolNames = cheatsheets.map((sheet) => sheet.name).join(' & ');
+const names = cheatsheets.map((sheet) => sheet.name);
+const toolNames = names.length > 1 ? `${names.slice(0, -1).join(', ')} & ${names.at(-1)}` : names.join('');
 
 export const metadata: Metadata = {
   title: { absolute: `${toolNames} cheat sheets: searchable, no ads` },
-  description: `Searchable ${cheatsheets.map((sheet) => sheet.name).join(' and ')} cheat sheets with your own prefix key or alias applied to every shortcut and command. Free, no ads.`,
+  description: `Searchable ${toolNames} cheat sheets, adapted to your setup: your tmux prefix, your kubectl alias, Docker or Podman, Terraform or OpenTofu. Free, no ads.`,
   alternates: { canonical: '/' },
 };
 
@@ -38,7 +39,7 @@ export default function HomePage() {
             </h1>
             <HeroLede>
               {siteDescription} Each cheat sheet puts the shortcuts and commands of one tool on a single searchable page,
-              adapts them to your own setup (your tmux prefix, your kubectl alias) and copies any command with a click.
+              adapts them to your own setup (your tmux prefix, your kubectl alias, Docker or Podman, Terraform or OpenTofu) and copies any command with a click.
               They’re made and kept up to date by <a href={authorUrl} className="text-text underline decoration-line underline-offset-4 hover:text-accent">{authorName}</a>,
               checked against the official documentation.
             </HeroLede>

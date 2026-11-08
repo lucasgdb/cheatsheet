@@ -10,7 +10,7 @@ export default function Image() {
     title: 'cheatsheets',
     suffix: '',
     command: 'ls',
-    summary: `Searchable ${cheatsheets.map((sheet) => sheet.name).join(' and ')} cheat sheets, adapted to your setup. Free, no ads.`,
+    summary: `Searchable ${cheatsheets.map((sheet) => sheet.name).join(', ')} cheat sheets, adapted to your setup. Free, no ads.`,
     status: `[cheat]  ${cheatsheets.map((sheet, index) => `${index}:${sheet.slug}`).join('  ')}`,
   });
 }

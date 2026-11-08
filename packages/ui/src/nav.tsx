@@ -18,9 +18,9 @@ export function Nav({ brand, children, className, ...props }: ComponentProps<'he
       )}
       {...props}
     >
-      <div className="gutter mx-auto flex h-full max-w-[1240px] items-center gap-5">
+      <div className="gutter mx-auto flex h-full max-w-[1240px] items-center gap-5 max-sm:gap-3">
         {brand}
-        <nav aria-label="Cheatsheets" className="flex min-w-0 gap-0.5 overflow-x-auto [scrollbar-width:none]">
+        <nav aria-label="Cheatsheets" className="flex min-w-0 gap-0.5 overflow-x-auto [scrollbar-width:none] max-sm:gap-0">
           {children}
         </nav>
       </div>
@@ -37,7 +37,8 @@ export function NavBrand({ render, className, ...props }: useRender.ComponentPro
         className: cn('flex items-center gap-2 text-[13px] font-bold whitespace-nowrap text-hi pointer-coarse:py-3', className),
         children: (
           <>
-            <span className="text-accent">&gt;_</span>cheatsheets
+            <span className="text-accent">&gt;_</span>
+            <span className="max-sm:sr-only">cheatsheets</span>
           </>
         ),
       },
@@ -60,7 +61,7 @@ export function NavLink({
       {
         'aria-current': current ? 'page' : undefined,
         className: cn(
-          'rounded px-2.5 py-1.5 transition-colors text-[13px] whitespace-nowrap pointer-coarse:py-3 text-muted-2 hover:text-hi aria-[current=page]:bg-ctl-on aria-[current=page]:text-accent',
+          'rounded px-2.5 py-1.5 transition-colors max-sm:px-2 text-[13px] whitespace-nowrap pointer-coarse:py-3 text-muted-2 hover:text-hi aria-[current=page]:bg-ctl-on aria-[current=page]:text-accent',
           className,
         ),
       },

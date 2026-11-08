@@ -4,6 +4,7 @@ import { cn } from './cn';
 export type CommandSyntax = 'tmux' | 'shell';
 
 const PUNCTUATION = new Set(['|', '>', '--']);
+const ENV_ASSIGNMENT = /^[A-Z_][A-Z0-9_]*=/;
 
 /** tmux: commands starting with ":" run inside tmux, everything else in the shell. */
 function highlightTmux(text: string): ReactNode {
@@ -18,9 +19,11 @@ function highlightTmux(text: string): ReactNode {
 /** shell: binary and punctuation muted, first word after the binary is the verb, flags coloured. */
 function highlightShell(text: string): ReactNode {
   let verbSeen = false;
-  const parts = text.split(' ').map((token, i) => {
+  const tokens = text.split(' ');
+  const binaryIndex = tokens.findIndex((token) => !ENV_ASSIGNMENT.test(token));
+  const parts = tokens.map((token, i) => {
     let className: string | undefined;
-    if (i === 0 || PUNCTUATION.has(token)) className = 'text-muted';
+    if (i <= binaryIndex || PUNCTUATION.has(token)) className = 'text-muted';
     else if (token.startsWith('-')) className = 'text-flag';
     else if (!verbSeen) {
       verbSeen = true;

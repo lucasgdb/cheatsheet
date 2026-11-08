@@ -67,7 +67,7 @@ export function CheatsheetView({ sheet }: { sheet: Cheatsheet }) {
   const applyAlias = useCallback(
     (command: string) =>
       control.kind === 'alias' && setting !== control.binary
-        ? command.replace(new RegExp(`^${control.binary}\\b`), setting)
+        ? command.replace(new RegExp(`^((?:[A-Z_][A-Z0-9_]*=\\S+\\s+)*)${control.binary}\\b`), `$1${setting}`)
         : command,
     [control, setting],
   );
@@ -233,7 +233,7 @@ export function CheatsheetView({ sheet }: { sheet: Cheatsheet }) {
             {control.kind === 'prefix' ? (
               <span>prefix {setting.replace('Ctrl+', 'C-')}</span>
             ) : (
-              <span>{setting === control.binary ? control.binary : `alias ${setting}`}</span>
+              <span>{control.options.find((option) => option.value === setting)?.label ?? setting}</span>
             )}
             {sheet.status.clock ? <StatusClock className="max-sm:hidden" /> : null}
           </>

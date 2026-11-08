@@ -73,6 +73,52 @@
   --sheet-display-weight: 900;
 }
 
+[data-sheet='docker'] {
+  /* docker: same ground, Docker blue for accents, amber flags */
+  --sheet-accent: #4fb3ff;
+  --sheet-ctl-on: #12233a;
+  --sheet-flash: #0f1b2b;
+  --sheet-pfx: #10202f;
+  --sheet-pfx-line: #24496d;
+  --sheet-prompt: #101a26;
+  --sheet-prompt-fg: #eef1f5;
+  --sheet-prompt-label: #4fb3ff;
+  --sheet-prompt-ph: #5f6b82;
+  --sheet-prompt-line: #1d63ed;
+  --sheet-bar: #1d63ed;
+  --sheet-bar-fg: #ffffff;
+  --sheet-cmd: #b9c1cd;
+  --sheet-cmd-hover: #ffffff;
+  --sheet-verb: #4fb3ff;
+  --sheet-flag: #f2c46d;
+  --sheet-font-display: var(--font-rubik-src), system-ui, sans-serif;
+  --sheet-font-body: var(--font-ibm-plex-mono-src), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --sheet-display-weight: 800;
+}
+
+[data-sheet='terraform'] {
+  /* terraform: same ground, HashiCorp purple for accents, teal flags */
+  --sheet-accent: #b29cff;
+  --sheet-ctl-on: #1f1934;
+  --sheet-flash: #19142b;
+  --sheet-pfx: #1a1629;
+  --sheet-pfx-line: #3d3266;
+  --sheet-prompt: #15121f;
+  --sheet-prompt-fg: #eef1f5;
+  --sheet-prompt-label: #b29cff;
+  --sheet-prompt-ph: #6a6585;
+  --sheet-prompt-line: #7b42bc;
+  --sheet-bar: #7b42bc;
+  --sheet-bar-fg: #ffffff;
+  --sheet-cmd: #b9c1cd;
+  --sheet-cmd-hover: #ffffff;
+  --sheet-verb: #b29cff;
+  --sheet-flag: #6fd3c4;
+  --sheet-font-display: var(--font-manrope-src), system-ui, sans-serif;
+  --sheet-font-body: var(--font-fira-code-src), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --sheet-display-weight: 800;
+}
+
 @theme inline {
   --color-bg: var(--sheet-bg);
   --color-nav: var(--sheet-nav);
@@ -151,6 +197,9 @@
     font-family: var(--font-mono);
     font-size: 13px;
     -webkit-font-smoothing: antialiased;
+    /* Commands must show exactly what gets typed: no "-" → "–" or "=>" → "⇒" ligatures. */
+    font-variant-ligatures: none;
+    font-feature-settings: 'calt' 0, 'liga' 0;
   }
 
   @media (max-width: 639px) {

@@ -6,6 +6,8 @@ export const ogSize = { width: 1200, height: 630 };
 const themes: Record<string, { accent: string; bar: string; barFg: string }> = {
   tmux: { accent: '#a8d38a', bar: '#a8d38a', barFg: '#0d1015' },
   kubectl: { accent: '#79a3ff', bar: '#326ce5', barFg: '#ffffff' },
+  docker: { accent: '#4fb3ff', bar: '#1d63ed', barFg: '#ffffff' },
+  terraform: { accent: '#b29cff', bar: '#7b42bc', barFg: '#ffffff' },
 };
 
 const fallback = { accent: '#a8d38a', bar: '#a8d38a', barFg: '#0d1015' };
@@ -43,7 +45,8 @@ export function renderOgImage({
           <div style={{ display: 'flex', fontSize: 34, color: '#8f98a8', lineHeight: 1.4, maxWidth: 980 }}>{summary}</div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', height: 64, padding: '0 80px', background: theme.bar, color: theme.barFg, fontSize: 26 }}>
-          {status}
+          {/* ASCII only: other glyphs would make the image renderer fetch fonts at build time. */}
+          {status.replace(/[^\x20-\x7E]/g, '').trim()}
         </div>
       </div>
     ),

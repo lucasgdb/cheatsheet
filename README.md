@@ -40,9 +40,18 @@ pnpm pdf            # needs Chromium: pnpm --filter @cheatsheets/web exec playwr
 
 Set `CHROMIUM_PATH` to use an existing Chromium binary instead.
 
+## Installable app (PWA)
+
+The site installs as an app (`app/manifest.ts`) and works offline: the service worker (`app/sw.js/route.ts`, registered in production only) caches every cheat sheet on the first visit. The manifest carries per-sheet shortcuts and install-dialog screenshots. Icons and screenshots are rendered by a script; regenerate them after changing the icon, colours or layout:
+
+```bash
+pnpm build
+pnpm pwa:assets     # public/icons, public/screenshots, app/apple-icon.png (same Chromium setup as pnpm pdf)
+```
+
 ## Add a cheat sheet
 
 1. Create `packages/content/src/<slug>.ts` exporting a `Cheatsheet` and add it to `cheatsheets` in `index.ts`.
 2. Add a `[data-sheet='<slug>']` token block in `packages/ui/src/styles.css` (override only what differs from the base).
 3. If it needs new fonts, load them in `apps/web/app/layout.tsx` and point `--sheet-font-*` at them.
-4. Add its colours to `apps/web/lib/og.tsx`, then run `pnpm build && pnpm pdf`.
+4. Add its colours to `apps/web/lib/themes.ts`, then run `pnpm build && pnpm pdf && pnpm pwa:assets`.

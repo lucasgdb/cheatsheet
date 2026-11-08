@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "pdf": "tsx scripts/generate-pdfs.ts"
+    "pdf": "tsx scripts/generate-pdfs.ts",
+    "pwa:assets": "tsx scripts/generate-pwa-assets.ts"
   },
   "dependencies": {
     "@cheatsheets/content": "workspace:*",

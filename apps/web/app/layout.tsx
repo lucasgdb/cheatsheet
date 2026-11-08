@@ -12,6 +12,7 @@ import {
   Victor_Mono,
 } from 'next/font/google';
 import { ToastProvider } from '@cheatsheets/ui';
+import { ServiceWorker } from '@/components/service-worker';
 import { SiteNav } from '@/components/site-nav';
 import { siteDescription, siteName, siteUrl } from '@/lib/site';
 import './globals.css';
@@ -33,6 +34,8 @@ export const metadata: Metadata = {
   title: { default: `${siteName}: command line cheat sheets`, template: `%s | ${siteName}` },
   description: siteDescription,
   applicationName: siteName,
+  appleWebApp: { capable: true, title: siteName, statusBarStyle: 'black-translucent' },
+  formatDetection: { telephone: false },
   openGraph: { type: 'website', siteName, url: '/' },
   twitter: { card: 'summary_large_image' },
   robots: { index: true, follow: true },
@@ -53,6 +56,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <SiteNav />
           {children}
         </ToastProvider>
+        <ServiceWorker />
       </body>
     </html>
   );

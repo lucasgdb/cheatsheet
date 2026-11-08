@@ -10,6 +10,7 @@
     "build": "pnpm --filter @cheatsheets/web build",
     "start": "pnpm --filter @cheatsheets/web start",
     "typecheck": "pnpm -r typecheck",
-    "pdf": "pnpm --filter @cheatsheets/web pdf"
+    "pdf": "pnpm --filter @cheatsheets/web pdf",
+    "pwa:assets": "pnpm --filter @cheatsheets/web pwa:assets"
   }
 }

@@ -1,17 +1,7 @@
 import { ImageResponse } from 'next/og';
+import { defaultTheme, sheetThemes } from './themes';
 
 export const ogSize = { width: 1200, height: 630 };
-
-/** Accent and status-bar colours per cheat sheet (mirrors the design system tokens). */
-const themes: Record<string, { accent: string; bar: string; barFg: string }> = {
-  tmux: { accent: '#a8d38a', bar: '#a8d38a', barFg: '#0d1015' },
-  kubectl: { accent: '#79a3ff', bar: '#326ce5', barFg: '#ffffff' },
-  vim: { accent: '#4cc87a', bar: '#d5d9e0', barFg: '#0d1015' },
-  docker: { accent: '#4fb3ff', bar: '#1d63ed', barFg: '#ffffff' },
-  terraform: { accent: '#b29cff', bar: '#7b42bc', barFg: '#ffffff' },
-};
-
-const fallback = { accent: '#a8d38a', bar: '#a8d38a', barFg: '#0d1015' };
 
 /** Terminal-style social image: prompt line, big title, summary and a status bar. */
 export function renderOgImage({
@@ -30,7 +20,7 @@ export function renderOgImage({
   summary: string;
   status: string;
 }) {
-  const theme = (slug && themes[slug]) || fallback;
+  const theme = (slug && sheetThemes[slug]) || defaultTheme;
   return new ImageResponse(
     (
       <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', background: '#0d1015', fontFamily: 'monospace' }}>

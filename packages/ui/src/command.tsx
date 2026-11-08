@@ -1,13 +1,13 @@
 import type { ComponentProps, ReactNode } from 'react';
 import { cn } from './cn';
 
-export type CommandSyntax = 'tmux' | 'shell';
+export type CommandSyntax = 'tmux' | 'vim' | 'shell';
 
 const PUNCTUATION = new Set(['|', '>', '--']);
 const ENV_ASSIGNMENT = /^[A-Z_][A-Z0-9_]*=/;
 
-/** tmux: commands starting with ":" run inside tmux, everything else in the shell. */
-function highlightTmux(text: string): ReactNode {
+/** tmux / vim: commands starting with ":" run inside the app, everything else in the shell. */
+function highlightPrompt(text: string): ReactNode {
   if (text.startsWith(':')) return text;
   return (
     <>
@@ -54,14 +54,14 @@ export function Command({
       type="button"
       className={cn(
         "relative p-0 text-left text-xs text-cmd [overflow-wrap:anywhere] max-sm:text-[13px] after:absolute after:-inset-x-1 after:-inset-y-2.5 after:content-[''] pointer-fine:after:hidden",
-        syntax === 'tmux'
-          ? 'hover:text-cmd-hover'
-          : 'decoration-accent underline-offset-3 hover:text-cmd-hover hover:underline',
+        syntax === 'shell'
+          ? 'decoration-accent underline-offset-3 hover:text-cmd-hover hover:underline'
+          : 'hover:text-cmd-hover',
         className,
       )}
       {...props}
     >
-      <code className="font-[inherit]">{syntax === 'tmux' ? highlightTmux(text) : highlightShell(text)}</code>
+      <code className="font-[inherit]">{syntax === 'shell' ? highlightShell(text) : highlightPrompt(text)}</code>
     </button>
   );
 }

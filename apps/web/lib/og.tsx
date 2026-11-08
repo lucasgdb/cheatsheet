@@ -6,6 +6,7 @@ export const ogSize = { width: 1200, height: 630 };
 const themes: Record<string, { accent: string; bar: string; barFg: string }> = {
   tmux: { accent: '#a8d38a', bar: '#a8d38a', barFg: '#0d1015' },
   kubectl: { accent: '#79a3ff', bar: '#326ce5', barFg: '#ffffff' },
+  vim: { accent: '#4cc87a', bar: '#d5d9e0', barFg: '#0d1015' },
   docker: { accent: '#4fb3ff', bar: '#1d63ed', barFg: '#ffffff' },
   terraform: { accent: '#b29cff', bar: '#7b42bc', barFg: '#ffffff' },
 };

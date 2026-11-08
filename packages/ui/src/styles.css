@@ -73,6 +73,32 @@
   --sheet-display-weight: 900;
 }
 
+[data-sheet='vim'] {
+  /* vim: same ground, Vim logo green, a reverse-video status line and the / search prompt */
+  --sheet-accent: #4cc87a;
+  --sheet-ctl-on: #13241a;
+  --sheet-flash: #0f1d15;
+  --sheet-pfx: #112017;
+  --sheet-pfx-line: #2a5a3b;
+  --sheet-prompt: #0f1612;
+  --sheet-prompt-fg: #eef1f5;
+  --sheet-prompt-label: #4cc87a;
+  --sheet-prompt-ph: #5f7368;
+  --sheet-prompt-line: #2e7d4a;
+  --sheet-bar: #d5d9e0;
+  --sheet-bar-fg: #0d1015;
+  --sheet-cmd: #a9b3c1;
+  --sheet-cmd-hover: #4cc87a;
+  --sheet-font-display: var(--font-victor-mono-src), ui-monospace, monospace;
+  --sheet-font-body: var(--font-source-code-pro-src), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --sheet-display-weight: 700;
+}
+
+/* Victor Mono's cursive italic is the vim sheet's signature. */
+[data-sheet='vim'] h1 {
+  font-style: italic;
+}
+
 [data-sheet='docker'] {
   /* docker: same ground, Docker blue for accents, amber flags */
   --sheet-accent: #4fb3ff;

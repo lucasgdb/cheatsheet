@@ -42,8 +42,9 @@ export type Control =
       options: ControlOption[];
     };
 
-/** How commands are highlighted. */
-export type Syntax = 'tmux' | 'shell';
+/** How commands are highlighted: 'shell' colours verbs and flags; 'tmux' and 'vim' mark
+ * shell commands with $ and leave in-app commands (starting with :) plain. */
+export type Syntax = 'tmux' | 'vim' | 'shell';
 
 /** How category labels read in the status bar and pane headers. */
 export type WindowStyle = 'index' | 'colon';

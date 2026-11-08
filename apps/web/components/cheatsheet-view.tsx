@@ -3,7 +3,7 @@
 import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import type { Cheatsheet, Entry } from '@cheatsheets/content';
 import {
-  Command,
+  CopyCommand,
   EntryRow,
   Hero,
   HeroLede,
@@ -18,7 +18,6 @@ import {
   StatusBar,
   keysToText,
   parseKeys,
-  useCopy,
 } from '@cheatsheets/ui';
 import { StatusClock } from './status-clock';
 
@@ -48,7 +47,6 @@ export function CheatsheetView({ sheet }: { sheet: Cheatsheet }) {
   const [current, setCurrent] = useState<string | null>(null);
   const deferredQuery = useDeferredValue(query);
   const searchRef = useRef<HTMLInputElement>(null);
-  const copy = useCopy();
 
   // Restore the saved prefix / alias after hydration.
   useEffect(() => {
@@ -171,7 +169,7 @@ export function CheatsheetView({ sheet }: { sheet: Cheatsheet }) {
                         ? entry.commands.map((command) => {
                             const text = applyAlias(command);
                             return (
-                              <Command key={command} text={text} syntax={sheet.syntax} onClick={() => copy(text)} />
+                              <CopyCommand key={command} text={text} syntax={sheet.syntax} />
                             );
                           })
                         : undefined

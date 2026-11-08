@@ -9,7 +9,7 @@ function Toasts() {
     <Toast.Root
       key={toast.id}
       toast={toast}
-      className="absolute bottom-0 left-1/2 max-w-[calc(100vw-32px)] -translate-x-1/2 rounded-[3px] bg-hi px-3.5 py-2 text-[12.5px] text-bg shadow-lg transition-all duration-200 [overflow-wrap:anywhere] data-ending-style:translate-y-3 data-ending-style:opacity-0 data-starting-style:translate-y-3 data-starting-style:opacity-0"
+      className="pointer-events-auto w-max max-w-full rounded-[3px] bg-hi px-3.5 py-2 text-[12.5px] text-bg shadow-lg transition-all duration-200 [overflow-wrap:anywhere] data-ending-style:translate-y-3 data-ending-style:opacity-0 data-starting-style:translate-y-3 data-starting-style:opacity-0"
     >
       <Toast.Description />
     </Toast.Root>
@@ -29,7 +29,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
 function ToastsPortal() {
   return (
     <Toast.Portal>
-      <Toast.Viewport className="fixed bottom-[calc(44px+env(safe-area-inset-bottom,0px))] left-1/2 z-[80] w-0">
+      <Toast.Viewport className="gutter pointer-events-none fixed inset-x-0 bottom-[calc(44px+env(safe-area-inset-bottom,0px))] z-[80] flex justify-center">
         <Toasts />
       </Toast.Viewport>
     </Toast.Portal>

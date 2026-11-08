@@ -1,5 +1,5 @@
 import { cheatsheets, countEntries } from '@cheatsheets/content';
-import { Command, EntryRow, Hero, HeroLede, HeroPath, Pane, PaneGrid } from '@cheatsheets/ui';
+import { CopyCommand, EntryRow, Hero, HeroLede, HeroPath, PageTransition, Pane, PaneGrid } from '@cheatsheets/ui';
 import { JsonLd } from '@/components/json-ld';
 import { SiteNav } from '@/components/site-nav';
 import { TransitionLink } from '@/components/view-transitions';
@@ -7,6 +7,7 @@ import { siteDescription, siteName, siteUrl } from '@/lib/site';
 
 export default function HomePage() {
   return (
+    <PageTransition>
     <div className="min-h-dvh bg-bg font-mono text-fg">
       <JsonLd
         data={{
@@ -54,7 +55,7 @@ export default function HomePage() {
                     <EntryRow
                       key={category.id}
                       title={category.description}
-                      commands={command ? <Command text={command} syntax={sheet.syntax} tabIndex={-1} /> : undefined}
+                      commands={command ? <CopyCommand text={command} syntax={sheet.syntax} /> : undefined}
                     />
                   );
                 })}
@@ -70,5 +71,6 @@ export default function HomePage() {
         </div>
       </main>
     </div>
+    </PageTransition>
   );
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { cheatsheets, countEntries, getCheatsheet } from '@cheatsheets/content';
+import { PageTransition } from '@cheatsheets/ui';
 import { CheatsheetView } from '@/components/cheatsheet-view';
 import { JsonLd } from '@/components/json-ld';
 import { SiteNav } from '@/components/site-nav';
@@ -34,6 +35,7 @@ export default async function CheatsheetPage({ params }: Props) {
   const url = `${siteUrl}/${sheet.slug}`;
 
   return (
+    <PageTransition>
     <div data-sheet={sheet.slug} className="min-h-dvh bg-bg font-mono text-fg">
       <JsonLd
         data={{
@@ -65,5 +67,6 @@ export default async function CheatsheetPage({ params }: Props) {
       <SiteNav current={sheet.slug} />
       <CheatsheetView sheet={sheet} />
     </div>
+    </PageTransition>
   );
 }

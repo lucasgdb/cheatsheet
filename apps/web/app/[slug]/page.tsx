@@ -24,6 +24,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: sheet.seo.description,
     authors: [{ name: authorName, url: authorUrl }],
     alternates: { canonical: url },
+    // Replaces the root's icon set, so the Apple touch icon (app/apple-icon.png) is listed again.
+    icons: {
+      icon: { url: `/favicon/${sheet.slug}`, type: 'image/svg+xml' },
+      apple: { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
+    },
     openGraph: {
       type: 'article',
       url,

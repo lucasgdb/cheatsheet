@@ -12,7 +12,7 @@ import { existsSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
 import { chromium, type Browser } from 'playwright-core';
 import { cheatsheets } from '@cheatsheets/content';
-import { defaultTheme, groundColor, sheetThemes } from '../lib/themes';
+import { iconAccent, iconSvg } from '../lib/icon';
 
 const root = path.resolve(import.meta.dirname, '..');
 const iconsDir = path.join(root, 'public', 'icons');
@@ -20,30 +20,8 @@ const shotsDir = path.join(root, 'public', 'screenshots');
 const port = Number(process.env.PWA_PORT ?? 4320);
 const base = `http://localhost:${port}`;
 
-const ground = groundColor;
-const text = '#eef1f5';
-const defaultAccent = defaultTheme.accent;
 
-/**
- * The prompt glyph of app/icon.svg ("> _") on a 32-unit grid. `inset` is the share of the
- * canvas left as margin around the 32×32 drawing: maskable icons keep the glyph inside the
- * 80% safe zone, so they get more room around it and a full-bleed square.
- */
-function iconSvg({ size, accent, maskable }: { size: number; accent: string; maskable: boolean }) {
-  const inset = maskable ? 0.2 : 0;
-  const radius = maskable ? 0 : 6;
-  const scale = (1 - inset * 2) * (size / 32);
-  const offset = inset * size;
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
-    <rect width="${size}" height="${size}" rx="${radius * (size / 32)}" fill="${ground}"/>
-    <g transform="translate(${offset} ${offset}) scale(${scale})">
-      <path d="M8 11l5 5-5 5" fill="none" stroke="${accent}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M15 22h9" stroke="${text}" stroke-width="2.5" stroke-linecap="round"/>
-    </g>
-  </svg>`;
-}
-
-async function renderIcon(browser: Browser, file: string, options: Parameters<typeof iconSvg>[0]) {
+async function renderIcon(browser: Browser, file: string, options: { size: number; accent: string; maskable: boolean }) {
   const page = await browser.newPage({ viewport: { width: options.size, height: options.size } });
   await page.setContent(`<html><body style="margin:0;background:transparent">${iconSvg(options)}</body></html>`);
   await page.screenshot({ path: file, omitBackground: true, clip: { x: 0, y: 0, width: options.size, height: options.size } });
@@ -109,13 +87,13 @@ async function main() {
   const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined });
   try {
     for (const size of [192, 512]) {
-      await renderIcon(browser, path.join(iconsDir, `icon-${size}.png`), { size, accent: defaultAccent, maskable: false });
-      await renderIcon(browser, path.join(iconsDir, `maskable-${size}.png`), { size, accent: defaultAccent, maskable: true });
+      await renderIcon(browser, path.join(iconsDir, `icon-${size}.png`), { size, accent: iconAccent(), maskable: false });
+      await renderIcon(browser, path.join(iconsDir, `maskable-${size}.png`), { size, accent: iconAccent(), maskable: true });
     }
     // iOS rounds the corners itself and shows transparency as black: full-bleed, like maskable.
-    await renderIcon(browser, path.join(root, 'app', 'apple-icon.png'), { size: 180, accent: defaultAccent, maskable: true });
+    await renderIcon(browser, path.join(root, 'app', 'apple-icon.png'), { size: 180, accent: iconAccent(), maskable: true });
     for (const sheet of cheatsheets) {
-      const accent = sheetThemes[sheet.slug]?.accent ?? defaultAccent;
+      const accent = iconAccent(sheet.slug);
       await renderIcon(browser, path.join(iconsDir, `shortcut-${sheet.slug}.png`), { size: 96, accent, maskable: false });
     }
     if (!process.argv.includes('--icons-only')) await renderScreenshots(browser);

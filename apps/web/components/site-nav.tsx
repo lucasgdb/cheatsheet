@@ -11,8 +11,10 @@ import { TransitionLink } from './view-transitions';
  */
 export function SiteNav() {
   const pathname = usePathname();
+  const current = cheatsheets.find((sheet) => pathname === `/${sheet.slug}`);
   return (
-    <Nav brand={<NavBrand render={<TransitionLink href="/" />} />}>
+    // The brand's prompt takes the current sheet's accent, like its tab icon.
+    <Nav brand={<NavBrand data-sheet={current?.slug} render={<TransitionLink href="/" />} />}>
       {cheatsheets.map((sheet) => (
         <NavLink
           key={sheet.slug}

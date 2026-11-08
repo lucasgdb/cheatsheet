@@ -214,7 +214,10 @@
   /* Always show the scrollbar so the layout doesn't shift between pages of different heights. */
   html {
     overflow-y: scroll;
-    scroll-padding-top: calc(var(--spacing-nav) + env(safe-area-inset-top, 0px) + 16px);
+    /* Anchored sections land right under the sticky header (the only offset; panes add none). */
+    /* +1px keeps the lit border (drawn 1px outside the pane) clear of the header. */
+    scroll-padding-top: calc(var(--spacing-nav) + env(safe-area-inset-top, 0px) + 1px);
+    scroll-padding-bottom: 40px;
   }
 
   body {

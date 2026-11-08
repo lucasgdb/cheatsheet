@@ -1,0 +1,477 @@
+<title>Cheatsheets</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Martian+Mono:wght@400;600;800&family=Red+Hat+Display:wght@700;900&family=Red+Hat+Mono:wght@400;500;700&display=swap">
+<style>
+/* Layout: site nav on top, each cheatsheet is a terminal-like grid of panes with a status bar pinned to the bottom.
+   Every cheatsheet ships its own design system as a token set on body[data-sheet]. Deliberately single dark theme. */
+:root {
+  color-scheme: dark;
+  --sw: 52px;
+  /* tmux DS: tmux defaults, green status line, yellow command prompt */
+  --bg: #0d1015; --nav-bg: #0a0c10; --line: #262d39; --dash: #1f2530;
+  --fg: #c6ccd6; --hi: #eef1f5; --text: #d5dae2; --muted: #6e7787; --muted2: #8f98a8;
+  --accent: #a8d38a; --accent-ink: #0d1015; --ctl-on: #1b2230; --flash: #121a14;
+  --kbd-bg: #171c25; --kbd-line: #2f3746; --kbd-fg: #dfe4eb; --pfx-bg: #141b12; --pfx-line: #34452b;
+  --prompt-bg: #e6c46e; --prompt-fg: #15130c; --prompt-ph: #6b5a26; --prompt-line: #e6c46e;
+  --bar-bg: #a8d38a; --bar-fg: #0d1015;
+  --cmd: #8b95a7; --cmd-hover: #e6c46e; --dollar: #4f5868; --verb: #8b95a7; --flag: #8b95a7;
+  --f-display: 'Martian Mono', ui-monospace, monospace;
+  --f-body: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+/* kubectl DS: Kubernetes blue, navy ground, syntax-coloured commands */
+body[data-sheet="kubectl"] {
+  --bg: #0d1015; --nav-bg: #0a0c10; --line: #262d39; --dash: #1f2530;
+  --fg: #c6ccd6; --hi: #eef1f5; --text: #d5dae2; --muted: #6e7787; --muted2: #8f98a8;
+  --accent: #79a3ff; --accent-ink: #ffffff; --ctl-on: #172034; --flash: #111a2b;
+  --kbd-bg: #171c25; --kbd-line: #2f3746; --kbd-fg: #dfe4eb; --pfx-bg: #131a2a; --pfx-line: #2c3c60;
+  --prompt-bg: #121826; --prompt-fg: #eef1f5; --prompt-ph: #5f6b82; --prompt-line: #326ce5;
+  --bar-bg: #326ce5; --bar-fg: #ffffff;
+  --cmd: #b9c1cd; --cmd-hover: #ffffff; --dollar: #4f5868; --verb: #79a3ff; --flag: #6fd3c4;
+  --f-display: 'Red Hat Display', system-ui, sans-serif;
+  --f-body: 'Red Hat Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--f-body); font-size: 13px; }
+button { font: inherit; color: inherit; cursor: pointer; }
+input { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.gut { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: 1240px; margin-inline: auto; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
+
+/* ---------- Site nav ---------- */
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 60; background: var(--nav-bg); }
+.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50; background: color-mix(in oklab, var(--nav-bg) 72%, transparent); -webkit-backdrop-filter: blur(14px) saturate(140%); backdrop-filter: blur(14px) saturate(140%); border-bottom: 1px solid color-mix(in oklab, var(--line) 80%, transparent); }
+.nav-in { height: var(--sw); display: flex; align-items: center; gap: 20px; }
+.brand { font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--hi); display: flex; align-items: center; gap: 8px; white-space: nowrap; font-size: 13px; }
+.brand i { font-style: normal; color: var(--accent); }
+.tabs { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; min-width: 0; }
+.tab { background: none; border: 0; padding: 6px 10px; border-radius: 4px; color: var(--muted2); white-space: nowrap; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+.tab:hover { color: var(--hi); }
+.tab[aria-current="page"] { color: var(--accent); background: var(--ctl-on); }
+
+/* ---------- Sheet ---------- */
+.sheet { min-height: calc(100vh - var(--sw)); padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px)); }
+.hero { padding-block: 40px 28px; display: grid; gap: 18px; }
+.path { color: var(--muted); font-size: 12px; }
+.path span { color: var(--accent); }
+h1 { font-family: var(--f-display); font-weight: 800; font-size: clamp(34px, 6vw, 60px); line-height: 1; margin: 0; color: var(--hi); letter-spacing: -.03em; overflow-wrap: anywhere; }
+body[data-sheet="kubectl"] h1 { font-weight: 900; letter-spacing: -.035em; }
+h1 em { font-style: normal; color: var(--accent); }
+.lede { margin: 0; max-width: 62ch; color: var(--muted2); line-height: 1.6; }
+.bar { display: flex; flex-wrap: wrap; gap: 12px; align-items: stretch; }
+.prompt { flex: 1 1 320px; display: flex; align-items: center; background: var(--prompt-bg); color: var(--prompt-fg); border: 1px solid var(--prompt-line); border-radius: 2px; padding: 0 12px; min-height: 40px; }
+.prompt span { font-weight: 700; margin-right: 8px; white-space: nowrap; }
+body[data-sheet="kubectl"] .prompt span { color: var(--accent); font-weight: 500; }
+.prompt input { flex: 1; min-width: 0; background: transparent; border: 0; outline: 0; color: var(--prompt-fg); font-size: 14px; }
+.prompt input::placeholder { color: var(--prompt-ph); }
+.ctl { display: flex; align-items: center; border: 1px solid var(--line); font-size: 12px; }
+.ctl > span { padding: 0 10px; color: var(--muted); white-space: nowrap; }
+.ctl button { background: transparent; border: 0; border-left: 1px solid var(--line); padding: 0 12px; height: 100%; min-height: 38px; color: var(--muted2); }
+.ctl button[aria-pressed="true"] { background: var(--ctl-on); color: var(--accent); }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.pane { background: var(--bg); padding: 14px 16px 18px; min-width: 0; position: relative; scroll-margin-top: calc(var(--sw) + env(safe-area-inset-top, 0px) + 16px); scroll-margin-bottom: 40px; }
+.pane::after { content: ""; position: absolute; inset: -1px; border: 1px solid transparent; pointer-events: none; transition: border-color .15s; }
+.pane:hover::after { border-color: var(--accent); }
+.pane.flash { animation: flash-bg 1.8s ease-out; }
+.pane.flash::after { animation: flash 1.8s ease-out; }
+@keyframes flash { 0%, 65% { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 28%, transparent); } 100% { border-color: transparent; box-shadow: none; } }
+@keyframes flash-bg { 0%, 40% { background: var(--flash); } 100% { background: var(--bg); } }
+.ph { display: flex; justify-content: space-between; color: var(--muted); font-size: 12px; margin-bottom: 4px; }
+.ph b { color: var(--accent); font-weight: 500; }
+.pd { color: var(--muted); font-size: 12px; margin: 0 0 12px; line-height: 1.5; }
+
+.r { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: minmax(24px, auto); gap: 6px 12px; padding: 8px 0; border-top: 1px dashed var(--dash); align-items: center; }
+.rt { color: var(--text); line-height: 1.45; text-box: trim-both cap alphabetic; }
+.rk { display: flex; justify-content: flex-end; }
+.keys { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px; justify-content: flex-end; }
+.grp { display: inline-flex; gap: 3px; align-items: center; }
+.then, .or { font-size: 11px; color: var(--muted); }
+kbd { font-family: inherit; background: var(--kbd-bg); border: 1px solid var(--kbd-line); border-bottom-width: 2px; border-radius: 3px; padding: 1px 6px; font-size: 12px; line-height: 18px; color: var(--kbd-fg); }
+.pfx kbd { color: var(--accent); border-color: var(--pfx-line); background: var(--pfx-bg); }
+.cmds { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 4px 14px; line-height: 18px; }
+.c { background: none; border: 0; padding: 0; color: var(--cmd); font-size: 12px; text-align: left; overflow-wrap: anywhere; }
+.c i { font-style: normal; color: var(--dollar); }
+.c .v { color: var(--verb); }
+.c .f { color: var(--flag); }
+.c .p { color: var(--muted); }
+body[data-sheet="tmux"] .c:hover { color: var(--cmd-hover); }
+body[data-sheet="kubectl"] .c:hover { text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 3px; }
+/* Narrow panes (phones): keys drop under the title instead of squeezing it */
+.pane { container-type: inline-size; }
+@container (max-width: 380px) {
+  .r { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .rk { justify-content: flex-start; }
+  .rk:empty { display: none; }
+  .keys { justify-content: flex-start; }
+}
+@media (max-width: 480px) {
+  .pane { padding: 12px 12px 14px; }
+  .hero { padding-block: 28px 20px; }
+}
+.empty { background: var(--bg); padding: 40px 16px; color: var(--muted2); grid-column: 1 / -1; }
+
+.status { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; background: var(--bar-bg); color: var(--bar-fg); font-size: 12.5px; padding-bottom: env(safe-area-inset-bottom, 0px); }
+.status-in { display: flex; gap: 12px; align-items: center; height: 26px; white-space: nowrap; }
+.wins { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; min-width: 0; flex: 1; }
+.wins button { background: none; border: 0; padding: 0 6px; color: var(--bar-fg); }
+.wins button[aria-current="true"] { background: var(--bar-fg); color: var(--bar-bg); }
+.right { margin-left: auto; display: flex; gap: 14px; }
+@media (max-width: 600px) { .right .hide-sm { display: none; } }
+
+.toast { position: fixed; left: 50%; bottom: calc(44px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 12px); opacity: 0; pointer-events: none; background: var(--hi); color: var(--bg); padding: 8px 14px; border-radius: 3px; font-size: 12.5px; transition: .18s ease; z-index: 80; max-width: calc(100% - 32px); overflow-wrap: anywhere; }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+</style>
+
+<nav class="nav" aria-label="Cheatsheets">
+  <div class="nav-in gut wrap">
+    <div class="brand"><i>&gt;_</i>cheatsheets</div>
+    <div class="tabs" data-tabs></div>
+  </div>
+</nav>
+<main class="sheet" data-sheet-root></main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const SHEETS = {
+  tmux: {
+    name: 'tmux',
+    path: '~/cheatsheets <span>(main)</span> $ tmux list-keys',
+    title: 'tmux<em>_</em>cheatsheet',
+    lede: 'Every tmux shortcut and command on one screen. Set your prefix once and every shortcut updates. Click a command to copy it.',
+    search: { label: '(search)', ph: 'split, rename, copy mode…' },
+    ctl: { label: 'set -g prefix', key: 'prefix', def: 'Ctrl+b', opts: [['Ctrl+b', 'C-b'], ['Ctrl+a', 'C-a'], ['Ctrl+Space', 'C-Space']] },
+    statusLeft: () => '[cheat]',
+    winLabel: (c, i) => `${i}:${c.id}`,
+    count: n => `${n} lines`,
+    statusRight: v => `<span>prefix ${v.replace('Ctrl+', 'C-')}</span><span class="hide-sm" data-clock></span>`,
+    cmd: (c) => `${c.startsWith(':') ? '' : '<i>$</i> '}${esc(c)}`,
+    copyText: c => c,
+    cats: [
+      { id: 'sessions', desc: 'Groups of windows that keep running after you disconnect.', items: [
+        ['Start a new session', [], ['tmux', 'tmux new', ':new']],
+        ['Start a new session with a name', [], ['tmux new -s mysession', ':new -s mysession']],
+        ['Kill a session by name', [], ['tmux kill-session -t mysession']],
+        ['Kill every session except the current one', [], ['tmux kill-session -a']],
+        ['Kill every session except mysession', [], ['tmux kill-session -a -t mysession']],
+        ['Rename the current session', ['P $'], []],
+        ['Detach from the session', ['P d'], []],
+        ['Detach other clients from the session', [], [':attach -d']],
+        ['List all sessions', ['P s'], ['tmux ls']],
+        ['Attach to the last session', [], ['tmux a']],
+        ['Attach to a session by name', [], ['tmux a -t mysession']],
+        ['Preview sessions and windows', ['P w'], []],
+        ['Switch to the previous session', ['P ('], []],
+        ['Switch to the next session', ['P )'], []],
+      ]},
+      { id: 'windows', desc: 'Full-screen tabs inside a session, numbered from 0.', items: [
+        ['Start a session with a named window', [], ['tmux new -s mysession -n mywindow']],
+        ['Create a window', ['P c'], []],
+        ['Rename the current window', ['P ,'], []],
+        ['Close the current window', ['P &'], []],
+        ['Go to the previous window', ['P p'], []],
+        ['Go to the next window', ['P n'], []],
+        ['Go to a window by number', ['P 0…9'], []],
+        ['Toggle the last active window', ['P l'], []],
+        ['Swap window 2 with window 1', [], [':swap-window -s 2 -t 1']],
+        ['Move the current window one position left', [], [':swap-window -t -1']],
+        ['Move a window to another session', [], [':move-window -s src:win -t dst:win']],
+        ['Renumber windows to close gaps', [], [':move-window -r']],
+      ]},
+      { id: 'panes', desc: 'Splits inside a window. Each pane runs its own shell.', items: [
+        ['Split into top and bottom', ['P "'], [':split-window']],
+        ['Split into left and right', ['P %'], [':split-window -h']],
+        ['Move to the pane in a direction', ['P ←↑↓→'], []],
+        ['Toggle the last active pane', ['P ;'], []],
+        ['Go to the next pane', ['P o'], []],
+        ['Show pane numbers, then type one to jump', ['P q'], []],
+        ['Zoom or unzoom the current pane', ['P z'], []],
+        ['Swap with the previous pane', ['P {'], []],
+        ['Swap with the next pane', ['P }'], []],
+        ['Cycle through pane layouts', ['P Space'], []],
+        ['Turn the pane into its own window', ['P !'], []],
+        ['Resize the pane', ['P C-←↑↓→'], [':resize-pane -D 5']],
+        ['Close the current pane', ['P x'], []],
+        ['Join window 2 into window 1 as a pane', [], [':join-pane -s 2 -t 1']],
+        ['Move pane 2.1 into window 1', [], [':join-pane -s 2.1 -t 1.0']],
+        ['Type in every pane at once', [], [':setw synchronize-panes']],
+      ]},
+      { id: 'copy-mode', desc: 'Scroll back, search and copy text. Keys below assume vi mode.', items: [
+        ['Enter copy mode', ['P ['], []],
+        ['Enter copy mode and scroll up a page', ['P PgUp'], []],
+        ['Quit copy mode', ['q'], []],
+        ['Go to the top / bottom', ['g', 'G'], []],
+        ['Move the cursor', ['h', 'j', 'k', 'l'], []],
+        ['Jump forward / back one word', ['w', 'b'], []],
+        ['Search forward / backward', ['/', '?'], []],
+        ['Next / previous match', ['n', 'N'], []],
+        ['Start a selection', ['Space'], []],
+        ['Clear the selection', ['Esc'], []],
+        ['Copy the selection', ['Enter'], []],
+        ['Paste the latest buffer', ['P ]'], []],
+        ['Use vi keys in copy mode', [], [':setw -g mode-keys vi']],
+        ['Show the latest buffer', [], [':show-buffer']],
+        ['Capture the visible pane into a buffer', [], [':capture-pane']],
+        ['List all buffers', [], [':list-buffers']],
+        ['Pick a buffer and paste it', [], [':choose-buffer']],
+        ['Save the buffer to a file', [], [':save-buffer buf.txt']],
+        ['Delete buffer 1', [], [':delete-buffer -b 1']],
+      ]},
+      { id: 'misc', desc: 'Command prompt, options and config.', items: [
+        ['Open the command prompt', ['P :'], []],
+        ['Set an option for all sessions', [], [':set -g OPTION']],
+        ['Set an option for all windows', [], [':setw -g OPTION']],
+        ['Turn on mouse support', [], [':set mouse on']],
+        ['Reload the config file', [], [':source-file ~/.tmux.conf']],
+      ]},
+      { id: 'help', desc: 'When you forget everything else.', items: [
+        ['List all key bindings', ['P ?'], ['tmux list-keys']],
+        ['Show every session, window and pane', [], ['tmux info']],
+      ]},
+    ],
+  },
+
+  kubectl: {
+    name: 'kubectl',
+    path: '~/cheatsheets <span>(main)</span> $ kubectl --help',
+    title: 'kubectl<em>_</em>cheatsheet',
+    lede: 'Everyday kubectl commands, grouped by task. Switch to the k alias and every command updates. Click a command to copy it.',
+    search: { label: '| grep -i', ph: 'logs, rollout, port-forward…' },
+    ctl: { label: 'alias', key: 'alias', def: 'kubectl', opts: [['kubectl', 'kubectl'], ['k', 'k=kubectl']] },
+    statusLeft: () => '⎈ kind-dev',
+    winLabel: c => `:${c.id}`,
+    count: n => `${n} cmds`,
+    statusRight: v => `<span class="hide-sm">ns default</span><span>${v === 'k' ? 'alias k' : 'kubectl'}</span>`,
+    cmd: (c, v) => {
+      const s = v === 'k' ? c.replace(/^kubectl\b/, 'k') : c;
+      let verb = true;
+      return '<i>$</i> ' + s.split(' ').map((t, i) => {
+        if (i === 0) return `<span class="p">${esc(t)}</span>`;
+        if (t === '|' || t === '>' || t === '--') return `<span class="p">${esc(t)}</span>`;
+        if (t.startsWith('-')) return `<span class="f">${esc(t)}</span>`;
+        if (verb) { verb = false; return `<span class="v">${esc(t)}</span>`; }
+        return esc(t);
+      }).join(' ');
+    },
+    copyText: (c, v) => v === 'k' ? c.replace(/^kubectl\b/, 'k') : c,
+    cats: [
+      { id: 'config', desc: 'Clusters, contexts and the active namespace.', items: [
+        ['Show the merged kubeconfig', [], ['kubectl config view']],
+        ['List contexts', [], ['kubectl config get-contexts']],
+        ['Show the current context', [], ['kubectl config current-context']],
+        ['Switch to another context', [], ['kubectl config use-context my-cluster']],
+        ['Set the default namespace', [], ['kubectl config set-context --current --namespace=my-ns']],
+        ['Show cluster endpoints', [], ['kubectl cluster-info']],
+        ['Show client and server versions', [], ['kubectl version']],
+      ]},
+      { id: 'get', desc: 'List and inspect resources.', items: [
+        ['List pods in the current namespace', [], ['kubectl get pods']],
+        ['List pods in every namespace', [], ['kubectl get pods -A']],
+        ['Show node and IP for each pod', [], ['kubectl get pods -o wide']],
+        ['Watch pods change live', [], ['kubectl get pods -w']],
+        ['List pods by label', [], ['kubectl get pods -l app=web']],
+        ['List the common resources', [], ['kubectl get all']],
+        ['Print a resource as YAML', [], ['kubectl get pod my-pod -o yaml']],
+        ['Sort pods by age', [], ['kubectl get pods --sort-by=.metadata.creationTimestamp']],
+        ['List only running pods', [], ['kubectl get pods --field-selector=status.phase=Running']],
+        ['List every resource type', [], ['kubectl api-resources']],
+        ['Explain a field of a resource', [], ['kubectl explain pod.spec.containers']],
+      ]},
+      { id: 'pods', desc: 'Logs, shells and port forwards.', items: [
+        ['Describe a pod and its events', [], ['kubectl describe pod my-pod']],
+        ['Print pod logs', [], ['kubectl logs my-pod']],
+        ['Stream pod logs', [], ['kubectl logs -f my-pod']],
+        ['Logs from one container', [], ['kubectl logs my-pod -c app']],
+        ['Logs from the previous crash', [], ['kubectl logs my-pod --previous']],
+        ['Logs from every pod with a label', [], ['kubectl logs -l app=web --all-containers']],
+        ['Open a shell in a pod', [], ['kubectl exec -it my-pod -- sh']],
+        ['Forward a local port to a pod', [], ['kubectl port-forward pod/my-pod 8080:80']],
+        ['Copy a file out of a pod', [], ['kubectl cp my-pod:/tmp/dump.sql ./dump.sql']],
+        ['Start a throwaway debug pod', [], ['kubectl run debug --image=busybox -it --rm -- sh']],
+        ['Show pod CPU and memory', [], ['kubectl top pod']],
+        ['Delete a pod', [], ['kubectl delete pod my-pod']],
+      ]},
+      { id: 'deploy', desc: 'Scale, update and roll back workloads.', items: [
+        ['Create a deployment', [], ['kubectl create deployment web --image=nginx']],
+        ['Scale a deployment', [], ['kubectl scale deploy/web --replicas=3']],
+        ['Update the container image', [], ['kubectl set image deploy/web nginx=nginx:1.27']],
+        ['Watch a rollout finish', [], ['kubectl rollout status deploy/web']],
+        ['Show rollout history', [], ['kubectl rollout history deploy/web']],
+        ['Roll back to the previous version', [], ['kubectl rollout undo deploy/web']],
+        ['Restart every pod in a deployment', [], ['kubectl rollout restart deploy/web']],
+        ['Autoscale on CPU', [], ['kubectl autoscale deploy/web --min=2 --max=10 --cpu-percent=80']],
+        ['Expose a deployment as a service', [], ['kubectl expose deploy/web --port=80 --target-port=8080']],
+      ]},
+      { id: 'apply', desc: 'Create and change resources from manifests.', items: [
+        ['Apply a manifest', [], ['kubectl apply -f app.yaml']],
+        ['Apply a kustomize directory', [], ['kubectl apply -k ./overlays/prod']],
+        ['Preview changes before applying', [], ['kubectl diff -f app.yaml']],
+        ['Delete what a manifest created', [], ['kubectl delete -f app.yaml']],
+        ['Edit a live resource', [], ['kubectl edit deploy/web']],
+        ['Generate YAML without creating', [], ['kubectl create deploy web --image=nginx --dry-run=client -o yaml > web.yaml']],
+        ['Add a label', [], ['kubectl label pod my-pod env=prod']],
+        ['Patch a field', [], ['kubectl patch deploy/web -p \'{"spec":{"replicas":2}}\'']],
+      ]},
+      { id: 'nodes', desc: 'Cluster capacity and maintenance.', items: [
+        ['List nodes', [], ['kubectl get nodes']],
+        ['Show node CPU and memory', [], ['kubectl top node']],
+        ['Stop scheduling on a node', [], ['kubectl cordon node-1']],
+        ['Evict pods before maintenance', [], ['kubectl drain node-1 --ignore-daemonsets']],
+        ['Allow scheduling again', [], ['kubectl uncordon node-1']],
+        ['Taint a node', [], ['kubectl taint nodes node-1 dedicated=gpu:NoSchedule']],
+        ['Recent cluster events', [], ['kubectl get events --sort-by=.lastTimestamp']],
+      ]},
+      { id: 'secrets', desc: 'Secrets, ConfigMaps and namespaces.', items: [
+        ['Create a secret from a value', [], ['kubectl create secret generic db --from-literal=password=s3cret']],
+        ['Read and decode a secret', [], ['kubectl get secret db -o jsonpath={.data.password} | base64 -d']],
+        ['Create a ConfigMap from a file', [], ['kubectl create configmap app --from-file=config.yaml']],
+        ['Create a namespace', [], ['kubectl create namespace my-ns']],
+        ['List namespaces', [], ['kubectl get ns']],
+      ]},
+      { id: 'short', desc: 'Type less. Every resource has a short name.', items: [
+        ['pods', ['po'], []],
+        ['services', ['svc'], []],
+        ['deployments', ['deploy'], []],
+        ['replicasets', ['rs'], []],
+        ['statefulsets', ['sts'], []],
+        ['daemonsets', ['ds'], []],
+        ['namespaces', ['ns'], []],
+        ['nodes', ['no'], []],
+        ['configmaps', ['cm'], []],
+        ['persistentvolumeclaims', ['pvc'], []],
+        ['ingresses', ['ing'], []],
+        ['horizontalpodautoscalers', ['hpa'], []],
+        ['serviceaccounts', ['sa'], []],
+      ]},
+    ],
+  },
+};
+
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const store = { get(k) { try { return localStorage.getItem(k); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch {} } };
+const state = { sheet: 'tmux', q: '', cur: null, ctl: {} };
+for (const [id, s] of Object.entries(SHEETS)) state.ctl[id] = store.get(`${id}:${s.ctl.key}`) || s.ctl.def;
+
+const S = () => SHEETS[state.sheet];
+const V = () => state.ctl[state.sheet];
+const root = document.querySelector('[data-sheet-root]');
+
+function tokens(seq) {
+  return seq.split(' ').map(t => {
+    if (state.sheet === 'tmux' && t === 'P') return { pfx: true, keys: V().split('+') };
+    if (t.startsWith('C-') && t.length > 2) return { keys: ['Ctrl', t.slice(2)] };
+    return { keys: [t] };
+  });
+}
+function keysHTML(alts) {
+  if (!alts.length) return '';
+  return '<span class="keys">' + alts.map(seq => tokens(seq).map(g =>
+    `<span class="grp${g.pfx ? ' pfx' : ''}">${g.keys.map(k => `<kbd>${esc(k)}</kbd>`).join('')}</span>`
+  ).join('<span class="then">then</span>')).join('<span class="or">/</span>') + '</span>';
+}
+const keysText = alts => alts.map(seq => tokens(seq).map(g => g.keys.join('+')).join(' then ')).join(' / ');
+
+function filtered() {
+  const words = state.q.toLowerCase().trim().split(/\s+/).filter(Boolean);
+  return S().cats.map(c => ({ ...c, items: c.items.filter(([t, k, cmds]) => {
+    const hay = (t + ' ' + cmds.join(' ') + ' ' + c.id + ' ' + keysText(k)).toLowerCase();
+    return words.every(w => hay.includes(w));
+  }) })).filter(c => c.items.length);
+}
+
+function renderShell() {
+  const s = S();
+  document.body.dataset.sheet = state.sheet;
+  document.querySelector('[data-tabs]').innerHTML = Object.entries(SHEETS).map(([id, x]) =>
+    `<button class="tab" data-sheet="${id}" aria-current="${id === state.sheet ? 'page' : 'false'}">${x.name}</button>`).join('');
+  root.innerHTML = `
+    <div class="hero gut wrap">
+      <div class="path">${s.path}</div>
+      <h1>${s.title}</h1>
+      <p class="lede">${esc(s.lede)}</p>
+      <div class="bar">
+        <label class="prompt"><span>${esc(s.search.label)}</span><input id="q-${state.sheet}" data-search placeholder="${esc(s.search.ph)}" autocomplete="off"></label>
+        <div class="ctl" role="group" aria-label="${esc(s.ctl.label)}"><span>${esc(s.ctl.label)}</span>${s.ctl.opts.map(([v, l]) => `<button data-ctl="${esc(v)}">${esc(l)}</button>`).join('')}</div>
+      </div>
+    </div>
+    <div class="gut wrap"><div class="grid" data-results></div></div>
+    <div class="status"><div class="status-in gut">
+      <span>${s.statusLeft()}</span>
+      <div class="wins" data-wins></div>
+      <div class="right" data-right></div>
+    </div></div>`;
+  render();
+}
+
+function render() {
+  const s = S(), v = V(), cats = filtered();
+  root.querySelector('[data-wins]').innerHTML = s.cats.map((c, i) =>
+    `<button data-jump="p-${c.id}" aria-current="${state.cur === 'p-' + c.id}">${s.winLabel(c, i)}</button>`).join('');
+  root.querySelector('[data-right]').innerHTML = s.statusRight(v);
+  root.querySelectorAll('[data-ctl]').forEach(b => b.setAttribute('aria-pressed', b.dataset.ctl === v));
+  root.querySelector('[data-results]').innerHTML = !cats.length
+    ? `<div class="empty">Nothing matches “${esc(state.q)}”.</div>`
+    : cats.map(c => `<div class="pane" id="p-${c.id}">
+        <div class="ph"><b>${s.winLabel(c, s.cats.indexOf(s.cats.find(x => x.id === c.id)))}</b><span>${s.count(c.items.length)}</span></div>
+        <p class="pd"># ${esc(c.desc)}</p>
+        ${c.items.map(([t, k, cmds]) => `<div class="r"><div class="rt">${esc(t)}</div><div class="rk">${keysHTML(k)}</div>${cmds.length ? `<div class="cmds">${cmds.map(x => `<button class="c" data-copy="${esc(s.copyText(x, v))}">${s.cmd(x, v)}</button>`).join('')}</div>` : ''}</div>`).join('')}
+      </div>`).join('');
+  tick();
+}
+
+function jump(id) {
+  state.cur = id;
+  root.querySelectorAll('[data-jump]').forEach(b => b.setAttribute('aria-current', b.dataset.jump === id));
+  const el = document.getElementById(id); if (!el) return;
+  el.classList.remove('flash');
+  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  let done = false;
+  const flash = () => { if (done) return; done = true; void el.offsetWidth; el.classList.add('flash'); };
+  addEventListener('scrollend', flash, { once: true });
+  setTimeout(flash, 700);
+}
+
+let toastT;
+function toast(text) {
+  const t = document.getElementById('toast');
+  t.textContent = text; t.classList.add('show');
+  clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 1600);
+}
+function copy(text) {
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(() => toast(`Copied: ${text}`), () => toast(`Select and copy: ${text}`));
+  else toast(`Select and copy: ${text}`);
+}
+
+function tick() {
+  const d = new Date(), p = n => String(n).padStart(2, '0');
+  const mon = d.toLocaleString('en', { month: 'short' });
+  document.querySelectorAll('[data-clock]').forEach(el => el.textContent = `${p(d.getHours())}:${p(d.getMinutes())} ${p(d.getDate())}-${mon}-${String(d.getFullYear()).slice(2)}`);
+}
+setInterval(tick, 15000);
+
+document.addEventListener('click', e => {
+  const tab = e.target.closest('.tab'); if (tab) { location.hash = tab.dataset.sheet; return; }
+  const c = e.target.closest('[data-copy]'); if (c) { copy(c.dataset.copy); return; }
+  const k = e.target.closest('[data-ctl]'); if (k) { state.ctl[state.sheet] = k.dataset.ctl; store.set(`${state.sheet}:${S().ctl.key}`, k.dataset.ctl); render(); return; }
+  const j = e.target.closest('[data-jump]'); if (j) jump(j.dataset.jump);
+});
+document.addEventListener('input', e => { if (e.target.matches('[data-search]')) { state.q = e.target.value; render(); } });
+document.addEventListener('keydown', e => {
+  const inSearch = e.target.matches && e.target.matches('[data-search]');
+  if (e.key === '/' && !inSearch && !/INPUT|SELECT|TEXTAREA/.test(e.target.tagName)) { e.preventDefault(); root.querySelector('[data-search]')?.focus(); return; }
+  if (inSearch && e.key === 'Escape') { state.q = ''; e.target.value = ''; render(); }
+});
+
+function route() {
+  const id = location.hash.slice(1);
+  state.sheet = SHEETS[id] ? id : 'tmux';
+  state.q = ''; state.cur = null;
+  renderShell();
+  scrollTo(0, 0);
+}
+addEventListener('hashchange', route);
+route();
+</script>

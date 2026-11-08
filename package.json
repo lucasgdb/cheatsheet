@@ -1,0 +1,14 @@
+{
+  "name": "cheatsheets",
+  "private": true,
+  "packageManager": "pnpm@12.18.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @cheatsheets/web dev",
+    "build": "pnpm --filter @cheatsheets/web build",
+    "start": "pnpm --filter @cheatsheets/web start",
+    "typecheck": "pnpm -r typecheck"
+  }
+}

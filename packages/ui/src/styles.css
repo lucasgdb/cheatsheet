@@ -1,0 +1,182 @@
+@import 'tailwindcss';
+
+/* Scan the design system's own components for class names. */
+@source '.';
+
+/*
+ * Every cheatsheet ships its own design system as a set of --sheet-* tokens,
+ * selected with data-sheet="<slug>" on a wrapper. Components only use the
+ * Tailwind tokens below, never literal colours.
+ *
+ * Deliberately single dark theme: the site reads as a terminal.
+ * Font variables (--font-*-src) are provided by next/font in the app layout.
+ */
+
+:root,
+[data-sheet='tmux'] {
+  color-scheme: dark;
+  /* tmux: defaults of tmux itself, green status line, yellow command prompt */
+  --sheet-bg: #0d1015;
+  --sheet-nav: #0a0c10;
+  --sheet-line: #262d39;
+  --sheet-dash: #1f2530;
+  --sheet-fg: #c6ccd6;
+  --sheet-hi: #eef1f5;
+  --sheet-text: #d5dae2;
+  --sheet-muted: #6e7787;
+  --sheet-muted-2: #8f98a8;
+  --sheet-accent: #a8d38a;
+  --sheet-ctl-on: #1b2230;
+  --sheet-flash: #121a14;
+  --sheet-kbd: #171c25;
+  --sheet-kbd-line: #2f3746;
+  --sheet-kbd-fg: #dfe4eb;
+  --sheet-pfx: #141b12;
+  --sheet-pfx-line: #34452b;
+  --sheet-prompt: #e6c46e;
+  --sheet-prompt-fg: #15130c;
+  --sheet-prompt-label: #15130c;
+  --sheet-prompt-ph: #6b5a26;
+  --sheet-prompt-line: #e6c46e;
+  --sheet-bar: #a8d38a;
+  --sheet-bar-fg: #0d1015;
+  --sheet-cmd: #8b95a7;
+  --sheet-cmd-hover: #e6c46e;
+  --sheet-dollar: #4f5868;
+  --sheet-verb: #8b95a7;
+  --sheet-flag: #8b95a7;
+  --sheet-font-display: var(--font-martian-mono-src), ui-monospace, monospace;
+  --sheet-font-body: var(--font-jetbrains-mono-src), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --sheet-display-weight: 800;
+}
+
+[data-sheet='kubectl'] {
+  /* kubectl: same terminal ground as tmux, Kubernetes blue for accents, syntax-coloured commands */
+  --sheet-accent: #79a3ff;
+  --sheet-ctl-on: #172034;
+  --sheet-flash: #111a2b;
+  --sheet-pfx: #131a2a;
+  --sheet-pfx-line: #2c3c60;
+  --sheet-prompt: #121826;
+  --sheet-prompt-fg: #eef1f5;
+  --sheet-prompt-label: #79a3ff;
+  --sheet-prompt-ph: #5f6b82;
+  --sheet-prompt-line: #326ce5;
+  --sheet-bar: #326ce5;
+  --sheet-bar-fg: #ffffff;
+  --sheet-cmd: #b9c1cd;
+  --sheet-cmd-hover: #ffffff;
+  --sheet-verb: #79a3ff;
+  --sheet-flag: #6fd3c4;
+  --sheet-font-display: var(--font-red-hat-display-src), system-ui, sans-serif;
+  --sheet-font-body: var(--font-red-hat-mono-src), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --sheet-display-weight: 900;
+}
+
+@theme inline {
+  --color-bg: var(--sheet-bg);
+  --color-nav: var(--sheet-nav);
+  --color-line: var(--sheet-line);
+  --color-dash: var(--sheet-dash);
+  --color-fg: var(--sheet-fg);
+  --color-hi: var(--sheet-hi);
+  --color-text: var(--sheet-text);
+  --color-muted: var(--sheet-muted);
+  --color-muted-2: var(--sheet-muted-2);
+  --color-accent: var(--sheet-accent);
+  --color-ctl-on: var(--sheet-ctl-on);
+  --color-flash: var(--sheet-flash);
+  --color-kbd: var(--sheet-kbd);
+  --color-kbd-line: var(--sheet-kbd-line);
+  --color-kbd-fg: var(--sheet-kbd-fg);
+  --color-pfx: var(--sheet-pfx);
+  --color-pfx-line: var(--sheet-pfx-line);
+  --color-prompt: var(--sheet-prompt);
+  --color-prompt-fg: var(--sheet-prompt-fg);
+  --color-prompt-label: var(--sheet-prompt-label);
+  --color-prompt-ph: var(--sheet-prompt-ph);
+  --color-prompt-line: var(--sheet-prompt-line);
+  --color-bar: var(--sheet-bar);
+  --color-bar-fg: var(--sheet-bar-fg);
+  --color-cmd: var(--sheet-cmd);
+  --color-cmd-hover: var(--sheet-cmd-hover);
+  --color-dollar: var(--sheet-dollar);
+  --color-verb: var(--sheet-verb);
+  --color-flag: var(--sheet-flag);
+
+  --font-display: var(--sheet-font-display);
+  --font-mono: var(--sheet-font-body);
+}
+
+@theme {
+  --spacing-nav: 52px;
+  --container-pane: 380px;
+
+  --animate-pane-flash: pane-flash 1.8s ease-out;
+  --animate-pane-ring: pane-ring 1.8s ease-out;
+
+  @keyframes pane-flash {
+    0%,
+    40% {
+      background-color: var(--sheet-flash);
+    }
+    100% {
+      background-color: var(--sheet-bg);
+    }
+  }
+
+  @keyframes pane-ring {
+    0%,
+    65% {
+      border-color: var(--sheet-accent);
+      box-shadow: 0 0 0 3px color-mix(in oklab, var(--sheet-accent) 28%, transparent);
+    }
+    100% {
+      border-color: transparent;
+      box-shadow: none;
+    }
+  }
+}
+
+@layer base {
+  html {
+    scroll-padding-top: calc(var(--spacing-nav) + env(safe-area-inset-top, 0px) + 16px);
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']) {
+    cursor: pointer;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation: none !important;
+      transition: none !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@utility gutter {
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+@utility text-trim {
+  text-box: trim-both cap alphabetic;
+}

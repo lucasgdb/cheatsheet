@@ -1,0 +1,63 @@
+'use client';
+
+import { useRender } from '@base-ui/react/use-render';
+import { mergeProps } from '@base-ui/react/merge-props';
+import type { ComponentProps, ReactNode } from 'react';
+import { cn } from './cn';
+
+/** Sticky, blurred site header. */
+export function Nav({ brand, children }: { brand: ReactNode; children?: ReactNode }) {
+  return (
+    <header className="sticky top-[env(safe-area-inset-top,0px)] z-50 border-b border-line/80 bg-nav/70 backdrop-blur-md backdrop-saturate-150">
+      <div className="gutter mx-auto flex h-nav max-w-[1240px] items-center gap-5">
+        {brand}
+        <nav aria-label="Cheatsheets" className="flex min-w-0 gap-0.5 overflow-x-auto [scrollbar-width:none]">
+          {children}
+        </nav>
+      </div>
+    </header>
+  );
+}
+
+export function NavBrand({ render, className, ...props }: useRender.ComponentProps<'a'>) {
+  return useRender({
+    defaultTagName: 'a',
+    render,
+    props: mergeProps<'a'>(
+      {
+        className: cn('flex items-center gap-2 text-[13px] font-bold whitespace-nowrap text-hi', className),
+        children: (
+          <>
+            <span className="text-accent">&gt;_</span>cheatsheets
+          </>
+        ),
+      },
+      props,
+    ),
+  });
+}
+
+/** A nav tab. Pass `render={<Link href="…" />}` to use a router link. */
+export function NavLink({
+  render,
+  current,
+  className,
+  ...props
+}: useRender.ComponentProps<'a'> & { current?: boolean }) {
+  return useRender({
+    defaultTagName: 'a',
+    render,
+    props: mergeProps<'a'>(
+      {
+        'aria-current': current ? 'page' : undefined,
+        className: cn(
+          'rounded px-2.5 py-1.5 text-[13px] whitespace-nowrap text-muted-2 hover:text-hi aria-[current=page]:bg-ctl-on aria-[current=page]:text-accent',
+          className,
+        ),
+      },
+      props,
+    ),
+  });
+}
+
+export type NavLinkProps = ComponentProps<typeof NavLink>;

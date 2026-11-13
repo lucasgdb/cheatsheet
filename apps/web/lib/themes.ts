@@ -5,6 +5,7 @@ export const sheetThemes: Record<string, { accent: string; bar: string; barFg: s
   vim: { accent: '#4cc87a', bar: '#d5d9e0', barFg: '#0d1015' },
   docker: { accent: '#4fb3ff', bar: '#1d63ed', barFg: '#ffffff' },
   terraform: { accent: '#b29cff', bar: '#7b42bc', barFg: '#ffffff' },
+  claude: { accent: '#d97757', bar: '#d97757', barFg: '#140c08' },
 };
 
 export const defaultTheme = { accent: '#a8d38a', bar: '#a8d38a', barFg: '#0d1015' };

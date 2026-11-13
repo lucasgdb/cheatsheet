@@ -145,6 +145,29 @@
   --sheet-display-weight: 800;
 }
 
+[data-sheet='claude'] {
+  /* claude: same ground, Claude's clay orange for accents, sage flags, a serif title */
+  --sheet-accent: #d97757;
+  --sheet-ctl-on: #2a1b15;
+  --sheet-flash: #22160f;
+  --sheet-pfx: #24170f;
+  --sheet-pfx-line: #6a3a26;
+  --sheet-prompt: #15110f;
+  --sheet-prompt-fg: #eef1f5;
+  --sheet-prompt-label: #d97757;
+  --sheet-prompt-ph: #75655c;
+  --sheet-prompt-line: #8a5038;
+  --sheet-bar: #d97757;
+  --sheet-bar-fg: #140c08;
+  --sheet-cmd: #b9c1cd;
+  --sheet-cmd-hover: #ffffff;
+  --sheet-verb: #e8916f;
+  --sheet-flag: #a3c9a8;
+  --sheet-font-display: var(--font-fraunces-src), Georgia, serif;
+  --sheet-font-body: var(--font-geist-mono-src), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --sheet-display-weight: 600;
+}
+
 @theme inline {
   --color-bg: var(--sheet-bg);
   --color-nav: var(--sheet-nav);

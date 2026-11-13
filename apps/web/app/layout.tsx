@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from 'next';
 import {
   Fira_Code,
+  Fraunces,
+  Geist_Mono,
   IBM_Plex_Mono,
   JetBrains_Mono,
   Manrope,
@@ -27,6 +29,8 @@ const ibmPlexMono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '500', '
 const manrope = Manrope({ subsets: ['latin'], weight: ['800'], variable: '--font-manrope-src', display: 'swap', preload: false });
 const victorMono = Victor_Mono({ subsets: ['latin'], weight: ['700'], style: ['italic'], variable: '--font-victor-mono-src', display: 'swap', preload: false });
 const sourceCodePro = Source_Code_Pro({ subsets: ['latin'], variable: '--font-source-code-pro-src', display: 'swap', preload: false });
+const fraunces = Fraunces({ subsets: ['latin'], weight: ['600'], variable: '--font-fraunces-src', display: 'swap', preload: false });
+const geistMono = Geist_Mono({ subsets: ['latin'], variable: '--font-geist-mono-src', display: 'swap', preload: false });
 const firaCode = Fira_Code({ subsets: ['latin'], variable: '--font-fira-code-src', display: 'swap', preload: false });
 
 export const metadata: Metadata = {
@@ -48,7 +52,7 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const fonts = [jetbrainsMono, martianMono, redHatDisplay, redHatMono, rubik, ibmPlexMono, manrope, firaCode, victorMono, sourceCodePro].map((font) => font.variable).join(' ');
+  const fonts = [jetbrainsMono, martianMono, redHatDisplay, redHatMono, rubik, ibmPlexMono, manrope, firaCode, victorMono, sourceCodePro, fraunces, geistMono].map((font) => font.variable).join(' ');
   return (
     <html lang="en" className={fonts}>
       <body>

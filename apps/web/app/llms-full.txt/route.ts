@@ -12,7 +12,8 @@ function keyText(sheet: Cheatsheet, alternatives: string[]): string {
         .map((token) => {
           if (token === 'P' && sheet.control.kind === 'prefix') return `prefix (${sheet.control.default})`;
           if (token.startsWith('C-') && token.length > 2) return `Ctrl+${token.slice(2)}`;
-          if (token.startsWith('M-') && token.length > 2) return `Alt+${token.slice(2)}`;
+          if (token.startsWith('M-') && token.length > 2) return `${sheet.control.kind === 'modifier' ? sheet.control.default : 'Alt'}+${token.slice(2)}`;
+          if (token.startsWith('S-') && token.length > 2) return `Shift+${token.slice(2)}`;
           return token;
         })
         .join(' then '),

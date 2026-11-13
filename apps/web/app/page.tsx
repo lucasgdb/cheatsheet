@@ -22,7 +22,7 @@ const toolNames = names.length > 1 ? `${names.slice(0, -1).join(', ')} & ${names
 
 export const metadata: Metadata = {
   title: { absolute: `${toolNames} cheat sheets: searchable, no ads` },
-  description: `Searchable ${toolNames} cheat sheets, adapted to your setup: your tmux prefix, Vim or Neovim, your kubectl alias, Docker or Podman, Terraform or OpenTofu. Free, no ads.`,
+  description: `Searchable ${toolNames} cheat sheets, adapted to your setup: your tmux prefix, Vim or Neovim, your kubectl alias, Docker or Podman, Terraform or OpenTofu, Alt or Option for Claude Code. Free, no ads.`,
   alternates: { canonical: '/' },
 };
 
@@ -39,7 +39,7 @@ export default function HomePage() {
             </h1>
             <HeroLede>
               {siteDescription} Each cheat sheet puts the shortcuts and commands of one tool on a single searchable page,
-              adapts them to your own setup (your tmux prefix, Vim or Neovim, your kubectl alias, Docker or Podman, Terraform or OpenTofu) and copies any command with a click.
+              adapts them to your own setup (your tmux prefix, Vim or Neovim, your kubectl alias, Docker or Podman, Terraform or OpenTofu, Alt or Option in Claude Code) and copies any command with a click.
               They’re made and kept up to date by <a href={authorUrl} className="text-text underline decoration-line underline-offset-4 hover:text-accent">{authorName}</a>,
               checked against the official documentation.
             </HeroLede>

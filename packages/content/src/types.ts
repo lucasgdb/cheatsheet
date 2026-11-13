@@ -3,7 +3,8 @@
  * - Each string is one alternative; alternatives render separated by "/".
  * - Space-separated tokens inside an alternative are pressed in sequence ("then").
  * - `P` is the sheet's prefix key (only for `control.kind === "prefix"`).
- * - `C-x` means Ctrl + x.
+ * - `C-x` means Ctrl + x, `M-x` means Meta (Alt, or the `modifier` control's choice) + x,
+ *   `S-x` means Shift + x.
  */
 export type Entry = {
   title: string;
@@ -40,11 +41,19 @@ export type Control =
       label: string;
       default: string;
       options: ControlOption[];
+    }
+  | {
+      /** Names the Meta key in `M-x` tokens (Alt on Linux and Windows, Option on macOS). */
+      kind: 'modifier';
+      label: string;
+      default: string;
+      options: ControlOption[];
     };
 
 /** How commands are highlighted: 'shell' colours verbs and flags; 'tmux' and 'vim' mark
- * shell commands with $ and leave in-app commands (starting with :) plain. */
-export type Syntax = 'tmux' | 'vim' | 'shell';
+ * shell commands with $ and leave in-app commands (starting with :) plain; 'claude' reads
+ * like 'shell' and colours the head of prompt-box input (/command, !, @, #). */
+export type Syntax = 'tmux' | 'vim' | 'shell' | 'claude';
 
 /** How category labels read in the status bar and pane headers. */
 export type WindowStyle = 'index' | 'colon';

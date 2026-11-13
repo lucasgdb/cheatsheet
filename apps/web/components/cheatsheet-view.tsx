@@ -64,6 +64,7 @@ export function CheatsheetView({ sheet }: { sheet: Cheatsheet }) {
   };
 
   const prefix = control.kind === 'prefix' ? setting : undefined;
+  const meta = control.kind === 'modifier' ? setting : undefined;
   const currentLabel = control.options.find((option) => option.value === setting)?.label ?? setting;
   const applyAlias = useCallback(
     (command: string) =>
@@ -82,7 +83,7 @@ export function CheatsheetView({ sheet }: { sheet: Cheatsheet }) {
         categoryId,
         sheet.categories.find((category) => category.id === categoryId)?.title ?? '',
         ...(entry.commands ?? []),
-        keysToText(parseKeys(entry.keys ?? [], prefix)),
+        keysToText(parseKeys(entry.keys ?? [], prefix, meta)),
       ]
         .join(' ')
         .toLowerCase();
@@ -91,7 +92,7 @@ export function CheatsheetView({ sheet }: { sheet: Cheatsheet }) {
     return sheet.categories
       .map((category) => ({ ...category, entries: category.entries.filter((entry) => matches(entry, category.id)) }))
       .filter((category) => category.entries.length > 0);
-  }, [deferredQuery, sheet.categories, prefix]);
+  }, [deferredQuery, sheet.categories, prefix, meta]);
 
   // Opening /tmux#panes marks that section as current (the browser already scrolled to it).
   useEffect(() => {
@@ -190,7 +191,7 @@ export function CheatsheetView({ sheet }: { sheet: Cheatsheet }) {
                   <EntryRow
                     key={entry.title}
                     title={entry.title}
-                    keys={entry.keys?.length ? <KeyCombo sequences={parseKeys(entry.keys, prefix)} /> : undefined}
+                    keys={entry.keys?.length ? <KeyCombo sequences={parseKeys(entry.keys, prefix, meta)} /> : undefined}
                     commands={
                       entry.commands?.length
                         ? entry.commands.map((command) => {
